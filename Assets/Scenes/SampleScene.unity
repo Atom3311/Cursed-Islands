@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneAsset: {fileID: 102900000, guid: 221896cf93a09e14e9e17a92bfacf0ef, type: 3}
-  _HierarchyColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  _HierarchyColor: {r: 0.24313726, g: 1, b: 0, a: 1}
   AutoLoadScene: 1
   _SceneGUID:
     Value:
@@ -190,7 +190,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.26, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 0.5, z: 10}
+  m_LocalScale: {x: 20.804998, y: 0.5, z: 20.390999}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -230,8 +230,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.32006976, y: -0.0056880615, z: 0.0019218595, w: 0.94737494}
-  m_LocalPosition: {x: 0.29423475, y: 8.789844, z: -9.435787}
+  m_LocalRotation: {x: 0.3846215, y: 0.0069213747, z: -0.0028801246, w: 0.92304397}
+  m_LocalPosition: {x: -1.2133591, y: 14.409439, z: -16.648283}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -461,7 +461,7 @@ GameObject:
   - component: {fileID: 132715844}
   - component: {fileID: 567655984}
   - component: {fileID: 567655983}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -17,4 +17,10 @@ public struct C_SpeedOfMovement : IComponentData
     [Min(0)]
     [SerializeField]
     private float _speed;
+
+    public C_SpeedOfMovement(float speed)
+    {
+        _speed = 0;
+        Speed = speed;
+    }
 }
