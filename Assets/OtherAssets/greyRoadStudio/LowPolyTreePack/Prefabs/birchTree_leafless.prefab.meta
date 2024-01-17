@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: be44d0243648ece459799ac0d5d4a2a6
+timeCreated: 1493673899
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 88376
+  packageName: LowPoly Trees and Rocks
+  packageVersion: 1.0
+  assetPath: Assets/greyRoadStudio/LowPolyTreePack/Prefabs/birchTree_leafless.prefab
+  uploadId: 177768

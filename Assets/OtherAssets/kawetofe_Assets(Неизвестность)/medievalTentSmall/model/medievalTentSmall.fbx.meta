@@ -34,8 +34,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -125,3 +123,10 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 18736
+  packageName: Medieval Tent Small
+  packageVersion: 1.0
+  assetPath: "Assets/OtherAssets/kawetofe_Assets(\u041D\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u043E\u0441\u0442\u044C)/medievalTentSmall/model/medievalTentSmall.fbx"
+  uploadId: 19933
