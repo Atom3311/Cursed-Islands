@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b009fa1b18fb56048a9147adaceb217e
+timeCreated: 1493748454
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 25800000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 88376
+  packageName: LowPoly Trees and Rocks
+  packageVersion: 1.0
+  assetPath: Assets/greyRoadStudio/LowPolyTreePack/Scenes/lineUp/LightingData.asset
+  uploadId: 177768

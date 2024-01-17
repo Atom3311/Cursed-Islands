@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 10dcade9ef34ab642846c4b889ac76e7
+timeCreated: 1493496370
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 88376
+  packageName: LowPoly Trees and Rocks
+  packageVersion: 1.0
+  assetPath: Assets/greyRoadStudio/LowPolyTreePack/Prefabs/rockGroup01.prefab
+  uploadId: 177768
