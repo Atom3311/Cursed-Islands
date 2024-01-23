@@ -1,5 +1,5 @@
 ﻿public enum OwnersInGame
 {
     Player,
-    Сontroller
+    Controller
 }

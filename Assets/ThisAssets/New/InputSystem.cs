@@ -35,6 +35,15 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""8739dcf5-3dcb-423e-80af-340e0f71a10e"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -48,6 +57,17 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""action"": ""OnClik"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7de6f0f9-71c3-4339-8e1d-a06f244d2c86"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -57,6 +77,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         // PC
         m_PC = asset.FindActionMap("PC", throwIfNotFound: true);
         m_PC_OnClik = m_PC.FindAction("OnClik", throwIfNotFound: true);
+        m_PC_MousePosition = m_PC.FindAction("MousePosition", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -119,11 +140,13 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PC;
     private List<IPCActions> m_PCActionsCallbackInterfaces = new List<IPCActions>();
     private readonly InputAction m_PC_OnClik;
+    private readonly InputAction m_PC_MousePosition;
     public struct PCActions
     {
         private @InputSystem m_Wrapper;
         public PCActions(@InputSystem wrapper) { m_Wrapper = wrapper; }
         public InputAction @OnClik => m_Wrapper.m_PC_OnClik;
+        public InputAction @MousePosition => m_Wrapper.m_PC_MousePosition;
         public InputActionMap Get() { return m_Wrapper.m_PC; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -136,6 +159,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @OnClik.started += instance.OnOnClik;
             @OnClik.performed += instance.OnOnClik;
             @OnClik.canceled += instance.OnOnClik;
+            @MousePosition.started += instance.OnMousePosition;
+            @MousePosition.performed += instance.OnMousePosition;
+            @MousePosition.canceled += instance.OnMousePosition;
         }
 
         private void UnregisterCallbacks(IPCActions instance)
@@ -143,6 +169,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @OnClik.started -= instance.OnOnClik;
             @OnClik.performed -= instance.OnOnClik;
             @OnClik.canceled -= instance.OnOnClik;
+            @MousePosition.started -= instance.OnMousePosition;
+            @MousePosition.performed -= instance.OnMousePosition;
+            @MousePosition.canceled -= instance.OnMousePosition;
         }
 
         public void RemoveCallbacks(IPCActions instance)
@@ -163,5 +192,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     public interface IPCActions
     {
         void OnOnClik(InputAction.CallbackContext context);
+        void OnMousePosition(InputAction.CallbackContext context);
     }
 }
