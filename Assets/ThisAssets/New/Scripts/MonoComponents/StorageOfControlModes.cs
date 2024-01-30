@@ -2,7 +2,7 @@
 using Unity.Entities;
 public class StorageOfControlModes : MonoBehaviour
 {
-    public TypesOfСontrolModes Mode;
+    public ControlMode Mode;
     private class ThisBaker : Baker<StorageOfControlModes>
     {
         public override void Bake(StorageOfControlModes authoring)
@@ -11,5 +11,4 @@ public class StorageOfControlModes : MonoBehaviour
             AddComponent(targetEntity, new InformationAboutControlMode() { ControlMode = authoring.Mode });
         }
     }
-
 }

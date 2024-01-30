@@ -2,5 +2,5 @@
 
 public struct InformationAboutControlMode : IComponentData
 {
-    public TypesOfСontrolModes ControlMode;
+    public ControlMode ControlMode;
 }

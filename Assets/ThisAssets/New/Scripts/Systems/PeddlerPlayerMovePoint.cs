@@ -9,13 +9,17 @@ using Unity.Collections;
 partial class PeddlerPlayerMovePoint : SystemBase
 {
     private InformationAboutControlMode _controlMode;
-    private Physics.CollisionWorld _collisionWorld;
+    private CollisionWorld _collisionWorld;
+    protected override void OnCreate()
+    {
+        RequireForUpdate<InformationAboutControlMode>();
+    }
     protected override void OnUpdate()
     {
-        SystemAPI.TryGetSingleton(out _controlMode);
         _collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
+        _controlMode = SystemAPI.GetSingleton<InformationAboutControlMode>();
     }
-    protected override void OnCreate()
+    protected override void OnStartRunning()
     {
         RuntimePlatform _platform = Application.platform;
         InputSystem _inputSystem = new InputSystem();
@@ -65,7 +69,7 @@ partial class PeddlerPlayerMovePoint : SystemBase
 
             foreach ((
                 RefRW<MovePoint> movePoint,
-                RefRO<OwnerComponent> owner) 
+                RefRO<OwnerComponent> owner)
                 in SystemAPI.Query<
                     RefRW<MovePoint>,
                     RefRO<OwnerComponent>>())
@@ -78,7 +82,7 @@ partial class PeddlerPlayerMovePoint : SystemBase
             int countOfEntities = listOfEntities.AsArray().Length;
             foreach (RefRW<MovePoint> movePoint in listOfEntities)
             {
-                if(countOfEntities == 1)
+                if (countOfEntities == 1)
                 {
                     movePoint.ValueRW.PointInWorld = finalPointForMove.Value;
                 }
@@ -91,7 +95,7 @@ partial class PeddlerPlayerMovePoint : SystemBase
         }
         void StartWithCheckControlMode(InputAction.CallbackContext context)
         {
-            if (_controlMode.ControlMode != TypesOfСontrolModes.Move)
+            if (_controlMode.ControlMode != ControlMode.Move)
                 return;
             methodsAfterCheckMode?.Invoke();
         }
