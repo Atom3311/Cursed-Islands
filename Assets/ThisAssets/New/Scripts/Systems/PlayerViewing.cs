@@ -22,8 +22,9 @@ public partial class PlayerViewing : SystemBase
         _previousPositionClik = duringMousePosition;
 
     }
-    protected override void OnCreate()
+    protected override void OnStartRunning()
     {
+
         RuntimePlatform platform = Application.platform;
         InputSystem inputSystem = new InputSystem();
         inputSystem.Enable();
@@ -42,5 +43,9 @@ public partial class PlayerViewing : SystemBase
         {
             _holding = false;
         };
+    }
+    protected override void OnCreate()
+    {
+        RequireForUpdate<InformationAboutControlMode>();
     }
 }

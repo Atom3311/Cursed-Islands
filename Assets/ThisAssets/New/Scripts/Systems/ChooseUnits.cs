@@ -4,12 +4,16 @@ using Unity.Physics;
 using UnityEngine;
 using Unity.Collections;
 using Unity.Mathematics;
+using Unity.Transforms;
+
 public partial class ChooseUnits : SystemBase
 {
     private CollisionWorld _collisionWorld;
     private InformationAboutControlMode _controlMode;
     private InputAction _inputActionWithClickPosition;
     private InputAction _inputActionWithClick;
+    private bool _holding;
+    private float2 _startMousePosition;
     protected override void OnCreate()
     {
         RequireForUpdate<InformationAboutControlMode>();
@@ -25,9 +29,8 @@ public partial class ChooseUnits : SystemBase
             _inputActionWithClick = inputSystem.PC.OnClick;
             _inputActionWithClickPosition = inputSystem.PC.MousePosition;
         }
-
-
-
+        _inputActionWithClick.started += (context) => { _holding = true; };
+        _inputActionWithClick.canceled += (context) => { _holding = false; };
     }
     protected override void OnUpdate()
     {
@@ -35,56 +38,80 @@ public partial class ChooseUnits : SystemBase
         _controlMode = SystemAPI.GetSingleton<InformationAboutControlMode>();
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
-        if (!_inputActionWithClick.triggered)
-            return;
-
+        float2 duringMousePosition = _inputActionWithClickPosition.ReadValue<Vector2>();
         ControlMode mode = _controlMode.ControlMode;
-
-        if(mode != ControlMode.Move && mode != ControlMode.Viewing)
-            ClearAllSelectedUnits();
-
-        if (mode != ControlMode.Selection)
+        if (_inputActionWithClick.triggered)
         {
-            ecb.Playback(EntityManager);
-            return;
+            if (mode != ControlMode.Move && mode != ControlMode.Viewing)
+                ClearAllSelectedUnits();
+            _startMousePosition = duringMousePosition;
+            SelectUnit();
         }
 
-        float2 pointOnScreen = _inputActionWithClickPosition.ReadValue<Vector2>();
+        if (_holding && mode == ControlMode.Selection)
+            SelectUnitsWithRect();
 
-        UnityEngine.Ray rayFromScreen = Camera.main.ScreenPointToRay(new float3(pointOnScreen, 0));
-        RaycastInput raycastInput = new RaycastInput()
-        {
-            Start = rayFromScreen.origin,
-            End = rayFromScreen.origin + rayFromScreen.direction * Constants.MouseRange,
-            Filter = CollisionFilter.Default
-        };
-        Unity.Physics.RaycastHit hitInformation;
-
-        _collisionWorld.CastRay(raycastInput, out hitInformation);
-
-        Entity targetEntity = hitInformation.Entity;
-
-        if (!SystemAPI.HasComponent<Unit>(targetEntity) || !SystemAPI.HasComponent<OwnerComponent>(targetEntity))
-        {
-            ecb.Playback(EntityManager);
-            return;
-        }
-
-        OwnerComponent ownerComponent = SystemAPI.GetComponent<OwnerComponent>(targetEntity);
-
-        if (ownerComponent.Owner != OwnersInGame.Player)
-        {
-            ecb.Playback(EntityManager);
-            return;
-        }
-
-        ecb.AddComponent<ChoosedUnit>(targetEntity);
         ecb.Playback(EntityManager);
         void ClearAllSelectedUnits()
         {
             foreach((RefRO<ChoosedUnit> unit, Entity entity) in SystemAPI.Query<RefRO<ChoosedUnit>>().WithEntityAccess())
             {
                 ecb.RemoveComponent<ChoosedUnit>(entity);
+            }
+        }
+        void SelectUnit()
+        {
+            float2 pointOnScreen = _inputActionWithClickPosition.ReadValue<Vector2>();
+
+            UnityEngine.Ray rayFromScreen = Camera.main.ScreenPointToRay(new float3(pointOnScreen, 0));
+            RaycastInput raycastInput = new RaycastInput()
+            {
+                Start = rayFromScreen.origin,
+                End = rayFromScreen.origin + rayFromScreen.direction * Constants.MouseRange,
+                Filter = CollisionFilter.Default
+            };
+            Unity.Physics.RaycastHit hitInformation;
+
+            _collisionWorld.CastRay(raycastInput, out hitInformation);
+
+            Entity targetEntity = hitInformation.Entity;
+
+            if (!SystemAPI.HasComponent<Unit>(targetEntity) || !SystemAPI.HasComponent<OwnerComponent>(targetEntity))
+                return;
+
+            OwnerComponent ownerComponent = SystemAPI.GetComponent<OwnerComponent>(targetEntity);
+
+            if (ownerComponent.Owner != OwnersInGame.Player)
+            {
+                return;
+            }
+            ecb.AddComponent<ChoosedUnit>(targetEntity);
+        }
+        void SelectUnitsWithRect()
+        {
+            RectInGame duringRect;
+            duringRect.Position = _startMousePosition;
+            duringRect.Scale = duringMousePosition - _startMousePosition;
+            foreach ((
+                RefRO<LocalTransform> transform,
+                RefRO<Unit> unit,
+                RefRO<OwnerComponent> owner,
+                Entity entity) in SystemAPI.Query<
+                    RefRO<LocalTransform>,
+                    RefRO<Unit>,
+                    RefRO<OwnerComponent>
+                    >().WithEntityAccess())
+            {
+                if (SystemAPI.HasComponent<ChoosedUnit>(entity))
+                    continue;
+
+                if (owner.ValueRO.Owner != OwnersInGame.Player)
+                    continue;
+
+                float3 positionUnitOnScreen = Camera.main.WorldToScreenPoint(transform.ValueRO.Position);
+
+                if (duringRect.Contains(new float2(positionUnitOnScreen.x, positionUnitOnScreen.y)))
+                    ecb.AddComponent<ChoosedUnit>(entity);
             }
         }
     }
