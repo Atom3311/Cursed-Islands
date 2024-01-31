@@ -30,7 +30,7 @@ partial class PeddlerPlayerMovePoint : SystemBase
         if (_platform == RuntimePlatform.WindowsPlayer || _platform == RuntimePlatform.WindowsEditor)
         {
             InputAction _playerMouseAction = _inputSystem.PC.MousePosition;
-            _inputSystem.PC.OnClik.started += StartWithCheckControlMode;
+            _inputSystem.PC.OnClick.started += StartWithCheckControlMode;
             methodsAfterCheckMode += PaddlePointWindows;
             void PaddlePointWindows()
             {
@@ -69,10 +69,13 @@ partial class PeddlerPlayerMovePoint : SystemBase
 
             foreach ((
                 RefRW<MovePoint> movePoint,
-                RefRO<OwnerComponent> owner)
+                RefRO<OwnerComponent> owner,
+                RefRO<ChoosedUnit>choosedUnit,
+                Entity entity)
                 in SystemAPI.Query<
                     RefRW<MovePoint>,
-                    RefRO<OwnerComponent>>())
+                    RefRO<OwnerComponent>,
+                    RefRO<ChoosedUnit>>().WithEntityAccess())
             {
                 if (owner.ValueRO.Owner != OwnersInGame.Player)
                     continue;

@@ -9,10 +9,11 @@ public class HullOfMovableUnit : MonoBehaviour
         public override void Bake(HullOfMovableUnit authoring)
         {
             Entity targetEntity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(targetEntity, new MovableUnit());
+            AddComponent<Unit>(targetEntity);
+            AddComponent<MovableUnit>(targetEntity);
             AddComponent(targetEntity, new OwnerComponent() { Owner = authoring.Owner });
             AddComponent(targetEntity , new SpeedComponent() { Speed = authoring.Speed });
-            AddComponent(targetEntity, new MovePoint());
+            AddComponent<MovePoint>(targetEntity);
         }
     }
 }

@@ -28,7 +28,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             ""id"": ""af1e4b63-6511-42f2-b465-de8dfd07ab64"",
             ""actions"": [
                 {
-                    ""name"": ""OnClik"",
+                    ""name"": ""OnClick"",
                     ""type"": ""Button"",
                     ""id"": ""342f5797-4275-4ba8-a4e9-681f4b8eede7"",
                     ""expectedControlType"": ""Button"",
@@ -63,7 +63,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""OnClik"",
+                    ""action"": ""OnClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -96,7 +96,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
 }");
         // PC
         m_PC = asset.FindActionMap("PC", throwIfNotFound: true);
-        m_PC_OnClik = m_PC.FindAction("OnClik", throwIfNotFound: true);
+        m_PC_OnClick = m_PC.FindAction("OnClick", throwIfNotFound: true);
         m_PC_MousePosition = m_PC.FindAction("MousePosition", throwIfNotFound: true);
         m_PC_ChangeControlMode = m_PC.FindAction("ChangeControlMode", throwIfNotFound: true);
     }
@@ -160,14 +160,14 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     // PC
     private readonly InputActionMap m_PC;
     private List<IPCActions> m_PCActionsCallbackInterfaces = new List<IPCActions>();
-    private readonly InputAction m_PC_OnClik;
+    private readonly InputAction m_PC_OnClick;
     private readonly InputAction m_PC_MousePosition;
     private readonly InputAction m_PC_ChangeControlMode;
     public struct PCActions
     {
         private @InputSystem m_Wrapper;
         public PCActions(@InputSystem wrapper) { m_Wrapper = wrapper; }
-        public InputAction @OnClik => m_Wrapper.m_PC_OnClik;
+        public InputAction @OnClick => m_Wrapper.m_PC_OnClick;
         public InputAction @MousePosition => m_Wrapper.m_PC_MousePosition;
         public InputAction @ChangeControlMode => m_Wrapper.m_PC_ChangeControlMode;
         public InputActionMap Get() { return m_Wrapper.m_PC; }
@@ -179,9 +179,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PCActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PCActionsCallbackInterfaces.Add(instance);
-            @OnClik.started += instance.OnOnClik;
-            @OnClik.performed += instance.OnOnClik;
-            @OnClik.canceled += instance.OnOnClik;
+            @OnClick.started += instance.OnOnClick;
+            @OnClick.performed += instance.OnOnClick;
+            @OnClick.canceled += instance.OnOnClick;
             @MousePosition.started += instance.OnMousePosition;
             @MousePosition.performed += instance.OnMousePosition;
             @MousePosition.canceled += instance.OnMousePosition;
@@ -192,9 +192,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IPCActions instance)
         {
-            @OnClik.started -= instance.OnOnClik;
-            @OnClik.performed -= instance.OnOnClik;
-            @OnClik.canceled -= instance.OnOnClik;
+            @OnClick.started -= instance.OnOnClick;
+            @OnClick.performed -= instance.OnOnClick;
+            @OnClick.canceled -= instance.OnOnClick;
             @MousePosition.started -= instance.OnMousePosition;
             @MousePosition.performed -= instance.OnMousePosition;
             @MousePosition.canceled -= instance.OnMousePosition;
@@ -220,7 +220,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     public PCActions @PC => new PCActions(this);
     public interface IPCActions
     {
-        void OnOnClik(InputAction.CallbackContext context);
+        void OnOnClick(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnChangeControlMode(InputAction.CallbackContext context);
     }

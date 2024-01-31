@@ -20,7 +20,8 @@ public partial class ChangeControlMode : SystemBase
         _modes = new ControlMode[]
         {
             ControlMode.Viewing,
-            ControlMode.Move
+            ControlMode.Move,
+            ControlMode.Selection
         };
 
         InputSystem inputSystem = new InputSystem();

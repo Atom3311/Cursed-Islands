@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Mathematics;
-[UpdateInGroup(typeof(LateSimulationSystemGroup))]
 public partial class PlayerViewing : SystemBase
 {
     private InformationAboutControlMode _controlMode;
@@ -31,7 +30,7 @@ public partial class PlayerViewing : SystemBase
 
         if (platform == RuntimePlatform.WindowsEditor || platform == RuntimePlatform.WindowsPlayer)
         {
-            _inputActionWithHolding = inputSystem.PC.OnClik;
+            _inputActionWithHolding = inputSystem.PC.OnClick;
             _inputActionWithClickPosition = inputSystem.PC.MousePosition;
         }
         _inputActionWithHolding.started += delegate (InputAction.CallbackContext context)
