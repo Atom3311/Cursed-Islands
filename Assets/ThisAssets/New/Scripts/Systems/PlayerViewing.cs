@@ -16,9 +16,13 @@ public partial class PlayerViewing : SystemBase
             return;
 
         float2 duringMousePosition = _inputActionWithClickPosition.ReadValue<Vector2>();
-        float2 translate = _previousPositionClik - duringMousePosition;
+        float2 translate = (_previousPositionClik - duringMousePosition) * Constants.SpeedOffsetCameraOnPixel;
+        Transform cameraTransform = Camera.main.transform;
+        cameraTransform.Translate(math.right() * translate.x);
+        float3 forward = cameraTransform.forward;
+        float3 finalForward = math.normalize(new float3(forward.x, 0, forward.z));
+        cameraTransform.Translate(finalForward * translate.y, Space.World);
 
-        Camera.main.transform.Translate(new float3(translate.x, 0, translate.y) * Constants.SpeedOffsetCameraOnPixel, Space.World);
         _previousPositionClik = duringMousePosition;
 
     }

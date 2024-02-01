@@ -1,17 +1,17 @@
 using UnityEngine;
-using TMPro;
-[RequireComponent(typeof(TextMeshProUGUI))]
+using UnityEngine.UI;
+[RequireComponent(typeof(Text))]
 public class TextWithControlMode : MonoBehaviour
 {
     public string StartText;
     private string[] _namesOfControlModes = new string[3];
-    private TextMeshProUGUI _textComponent;
+    private Text _textComponent;
     private void Awake()
     {
-        _namesOfControlModes[(int)ControlMode.Move] = "Moving";
-        _namesOfControlModes[(int)ControlMode.Selection] = "Selection";
-        _namesOfControlModes[(int)ControlMode.Viewing] = "Viewing";
-        _textComponent = GetComponent<TextMeshProUGUI>();
+        _namesOfControlModes[(int)ControlMode.Move] = "Перемещение";
+        _namesOfControlModes[(int)ControlMode.Selection] = "Выбор";
+        _namesOfControlModes[(int)ControlMode.Viewing] = "Просмотр";
+        _textComponent = GetComponent<Text>();
     }
     public void WriteText(ControlMode mode)
     {
