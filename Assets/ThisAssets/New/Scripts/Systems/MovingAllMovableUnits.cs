@@ -31,7 +31,7 @@ partial struct MovingAllMovableUnits : ISystem
             direction = math.normalize(direction);
 
             float move = package.SpeedComponent.ValueRO.Speed * SystemAPI.Time.DeltaTime;
-
+            transform.ValueRW = transform.ValueRO.WithRotation(quaternion.LookRotation(targetPoint.Value - position, math.up()));
             if (math.distance(position, targetPoint.Value) <= move)
             {
                 transform.ValueRW.Position = targetPoint.Value;

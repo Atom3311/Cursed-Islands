@@ -14,9 +14,11 @@ public partial class ChooseUnits : SystemBase
     private InputAction _inputActionWithClick;
     private bool _holding;
     private float2 _startMousePosition;
+    private GraphicSettingsComponent _graphicSettings;
     protected override void OnCreate()
     {
         RequireForUpdate<InformationAboutControlMode>();
+        RequireForUpdate<GraphicSettingsComponent>();
     }
     protected override void OnStartRunning()
     {
@@ -31,6 +33,9 @@ public partial class ChooseUnits : SystemBase
         }
         _inputActionWithClick.started += (context) => { _holding = true; };
         _inputActionWithClick.canceled += (context) => { _holding = false; };
+
+        _graphicSettings = SystemAPI.GetSingleton<GraphicSettingsComponent>();
+
     }
     protected override void OnUpdate()
     {
@@ -44,19 +49,42 @@ public partial class ChooseUnits : SystemBase
         {
             if (mode != ControlMode.Move && mode != ControlMode.Viewing)
                 ClearAllSelectedUnits();
+
+            if (mode != ControlMode.Selection)
+                return;
             _startMousePosition = duringMousePosition;
             SelectUnit();
         }
 
         if (_holding && mode == ControlMode.Selection)
-            SelectUnitsWithRect();
+        {
+            RectInGame duringRect;
+            duringRect.Position = _startMousePosition;
+            duringRect.Scale = duringMousePosition - _startMousePosition;
+
+            SelectUnitsWithRect(duringRect);
+            ChekAllSelectedUnits(duringRect);
+        }
+            
 
         ecb.Playback(EntityManager);
         void ClearAllSelectedUnits()
         {
-            foreach((RefRO<ChoosedUnit> unit, Entity entity) in SystemAPI.Query<RefRO<ChoosedUnit>>().WithEntityAccess())
+            foreach((
+                RefRO<ChoosedUnit> unit,
+                Entity entity) in SystemAPI.Query<
+                    RefRO<ChoosedUnit>>().
+                    WithEntityAccess())
             {
                 ecb.RemoveComponent<ChoosedUnit>(entity);
+            }
+            foreach((
+                RefRO<GraphicOfChooseUnit> graphic,
+                Entity entity) in SystemAPI.Query<
+                    RefRO<GraphicOfChooseUnit>>().
+                    WithEntityAccess())
+            {
+                ecb.DestroyEntity(entity);
             }
         }
         void SelectUnit()
@@ -85,13 +113,11 @@ public partial class ChooseUnits : SystemBase
             {
                 return;
             }
+            AddGraphicForEntity(targetEntity);
             ecb.AddComponent<ChoosedUnit>(targetEntity);
         }
-        void SelectUnitsWithRect()
+        void SelectUnitsWithRect(RectInGame targetRect)
         {
-            RectInGame duringRect;
-            duringRect.Position = _startMousePosition;
-            duringRect.Scale = duringMousePosition - _startMousePosition;
             foreach ((
                 RefRO<LocalTransform> transform,
                 RefRO<Unit> unit,
@@ -110,9 +136,49 @@ public partial class ChooseUnits : SystemBase
 
                 float3 positionUnitOnScreen = Camera.main.WorldToScreenPoint(transform.ValueRO.Position);
 
-                if (duringRect.Contains(new float2(positionUnitOnScreen.x, positionUnitOnScreen.y)))
+                if (targetRect.Contains(new float2(positionUnitOnScreen.x, positionUnitOnScreen.y)))
+                {
                     ecb.AddComponent<ChoosedUnit>(entity);
+                    AddGraphicForEntity(entity);
+                }
             }
+        }
+        void ChekAllSelectedUnits(RectInGame targetRect)
+        {
+            foreach ((
+                RefRO<LocalTransform> transform,
+                RefRO<ChoosedUnit> choosedUnit,
+                Entity entity) in SystemAPI.Query<
+                    RefRO<LocalTransform>,
+                    RefRO<ChoosedUnit>
+                    >().WithEntityAccess())
+            {
+
+                float3 positionUnitOnScreen = Camera.main.WorldToScreenPoint(transform.ValueRO.Position);
+                if (!targetRect.Contains(new float2(positionUnitOnScreen.x, positionUnitOnScreen.y)))
+                {
+                    ecb.RemoveComponent<ChoosedUnit>(entity);
+                    foreach ((
+                        RefRO<GraphicOfChooseUnit> graphic,
+                        Entity entityOfGraphic) in SystemAPI.Query<
+                            RefRO<GraphicOfChooseUnit>>().
+                            WithEntityAccess())
+                    {
+                        Parent parentOfGraphic = SystemAPI.GetComponent<Parent>(entityOfGraphic);
+                        if (parentOfGraphic.Value != entity)
+                            continue;
+
+                        ecb.DestroyEntity(entityOfGraphic);
+
+                    }
+                }
+            }
+        }
+        void AddGraphicForEntity(Entity targetEntity)
+        {
+            Entity targetGraphic =  ecb.Instantiate(_graphicSettings.GraphicOfChooseUnit);
+            ecb.AddComponent(targetGraphic, new Parent() { Value = targetEntity });
+            ecb.AddComponent<GraphicOfChooseUnit>(targetGraphic);
         }
     }
 }
