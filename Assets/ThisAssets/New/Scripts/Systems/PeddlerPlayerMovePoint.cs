@@ -35,7 +35,20 @@ partial class PeddlerPlayerMovePoint : SystemBase
             void PaddlePointWindows()
             {
                 float2 pointOnScreen = _playerMouseAction.ReadValue<Vector2>();
-                MainPaddleScreenPoint(pointOnScreen);
+                if(!PointOnScreen.PointOnUIElement(pointOnScreen))
+                    MainPaddleScreenPoint(pointOnScreen);
+            }
+        }
+        else
+        {
+            InputAction _playerMouseAction = _inputSystem.Android.TapPosition;
+            _inputSystem.Android.OnTab.started += StartWithCheckControlMode;
+            methodsAfterCheckMode += PaddlePointAndroid;
+            void PaddlePointAndroid()
+            {
+                float2 pointOnScreen = _playerMouseAction.ReadValue<Touch>().position;
+                if (!PointOnScreen.PointOnUIElement(pointOnScreen))
+                    MainPaddleScreenPoint(pointOnScreen);
             }
         }
         void MainPaddleScreenPoint(float2 pointOnScreen)

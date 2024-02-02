@@ -9,13 +9,18 @@ public partial class PlayerViewing : SystemBase
     private InputAction _inputActionWithClickPosition;
     private bool _holding;
     private float2 _previousPositionClik;
+    private RuntimePlatform _platform;
     protected override void OnUpdate()
     {
         _controlMode = SystemAPI.GetSingleton<InformationAboutControlMode>();
         if (!_holding || _controlMode.ControlMode != ControlMode.Viewing)
             return;
+        float2 duringMousePosition;
+        if (_platform == RuntimePlatform.WindowsEditor || _platform == RuntimePlatform.WindowsPlayer)
+            duringMousePosition = _inputActionWithClickPosition.ReadValue<Vector2>();
+        else
+            duringMousePosition = _inputActionWithClickPosition.ReadValue<Touch>().position;
 
-        float2 duringMousePosition = _inputActionWithClickPosition.ReadValue<Vector2>();
         float2 translate = (_previousPositionClik - duringMousePosition) * Constants.SpeedOffsetCameraOnPixel;
         Transform cameraTransform = Camera.main.transform;
         cameraTransform.Translate(math.right() * translate.x);
@@ -29,19 +34,27 @@ public partial class PlayerViewing : SystemBase
     protected override void OnStartRunning()
     {
 
-        RuntimePlatform platform = Application.platform;
+        _platform = Application.platform;
         InputSystem inputSystem = new InputSystem();
         inputSystem.Enable();
 
-        if (platform == RuntimePlatform.WindowsEditor || platform == RuntimePlatform.WindowsPlayer)
+        if (_platform == RuntimePlatform.WindowsEditor || _platform == RuntimePlatform.WindowsPlayer)
         {
             _inputActionWithHolding = inputSystem.PC.OnClick;
             _inputActionWithClickPosition = inputSystem.PC.MousePosition;
         }
+        else
+        {
+            _inputActionWithHolding = inputSystem.Android.OnTab;
+            _inputActionWithClickPosition = inputSystem.Android.TapPosition;
+        }
         _inputActionWithHolding.started += delegate (InputAction.CallbackContext context)
         {
             _holding = true;
-            _previousPositionClik = _inputActionWithClickPosition.ReadValue<Vector2>();
+            if(_platform == RuntimePlatform.WindowsEditor || _platform == RuntimePlatform.WindowsPlayer)
+                _previousPositionClik = _inputActionWithClickPosition.ReadValue<Vector2>();
+            else
+                _previousPositionClik = _inputActionWithClickPosition.ReadValue<Touch>().position;
         };
         _inputActionWithHolding.canceled += delegate (InputAction.CallbackContext context)
         {
@@ -51,5 +64,6 @@ public partial class PlayerViewing : SystemBase
     protected override void OnCreate()
     {
         RequireForUpdate<InformationAboutControlMode>();
+        Enabled = false;
     }
 }

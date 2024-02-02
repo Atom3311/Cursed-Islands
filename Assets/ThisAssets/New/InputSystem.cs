@@ -44,15 +44,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""ChangeControlMode"",
-                    ""type"": ""Button"",
-                    ""id"": ""a54fe8ae-b7d9-40f5-915a-4783f39e9cea"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -77,15 +68,52 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""action"": ""MousePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Android"",
+            ""id"": ""83763946-c5cd-4b7a-a8da-f37f9c6c9f3b"",
+            ""actions"": [
+                {
+                    ""name"": ""OnTab"",
+                    ""type"": ""Button"",
+                    ""id"": ""fb3a3c92-9544-44aa-a267-272335cd88aa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""TapPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""44ffe2de-77c4-4fc4-ab82-2cc058940b59"",
+                    ""expectedControlType"": ""Touch"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
                     ""name"": """",
-                    ""id"": ""6f2ebc53-8e50-4622-9e5f-26b06188d9fd"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""id"": ""e94027e7-d25a-4c38-91d8-011a6d8855d7"",
+                    ""path"": ""<Touchscreen>/Press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeControlMode"",
+                    ""action"": ""OnTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d8ae5b16-7fe3-4ea4-9282-68c30a294cb1"",
+                    ""path"": ""<Touchscreen>/primaryTouch"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TapPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -98,7 +126,10 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_PC = asset.FindActionMap("PC", throwIfNotFound: true);
         m_PC_OnClick = m_PC.FindAction("OnClick", throwIfNotFound: true);
         m_PC_MousePosition = m_PC.FindAction("MousePosition", throwIfNotFound: true);
-        m_PC_ChangeControlMode = m_PC.FindAction("ChangeControlMode", throwIfNotFound: true);
+        // Android
+        m_Android = asset.FindActionMap("Android", throwIfNotFound: true);
+        m_Android_OnTab = m_Android.FindAction("OnTab", throwIfNotFound: true);
+        m_Android_TapPosition = m_Android.FindAction("TapPosition", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -162,14 +193,12 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private List<IPCActions> m_PCActionsCallbackInterfaces = new List<IPCActions>();
     private readonly InputAction m_PC_OnClick;
     private readonly InputAction m_PC_MousePosition;
-    private readonly InputAction m_PC_ChangeControlMode;
     public struct PCActions
     {
         private @InputSystem m_Wrapper;
         public PCActions(@InputSystem wrapper) { m_Wrapper = wrapper; }
         public InputAction @OnClick => m_Wrapper.m_PC_OnClick;
         public InputAction @MousePosition => m_Wrapper.m_PC_MousePosition;
-        public InputAction @ChangeControlMode => m_Wrapper.m_PC_ChangeControlMode;
         public InputActionMap Get() { return m_Wrapper.m_PC; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -185,9 +214,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @MousePosition.started += instance.OnMousePosition;
             @MousePosition.performed += instance.OnMousePosition;
             @MousePosition.canceled += instance.OnMousePosition;
-            @ChangeControlMode.started += instance.OnChangeControlMode;
-            @ChangeControlMode.performed += instance.OnChangeControlMode;
-            @ChangeControlMode.canceled += instance.OnChangeControlMode;
         }
 
         private void UnregisterCallbacks(IPCActions instance)
@@ -198,9 +224,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @MousePosition.started -= instance.OnMousePosition;
             @MousePosition.performed -= instance.OnMousePosition;
             @MousePosition.canceled -= instance.OnMousePosition;
-            @ChangeControlMode.started -= instance.OnChangeControlMode;
-            @ChangeControlMode.performed -= instance.OnChangeControlMode;
-            @ChangeControlMode.canceled -= instance.OnChangeControlMode;
         }
 
         public void RemoveCallbacks(IPCActions instance)
@@ -218,10 +241,68 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         }
     }
     public PCActions @PC => new PCActions(this);
+
+    // Android
+    private readonly InputActionMap m_Android;
+    private List<IAndroidActions> m_AndroidActionsCallbackInterfaces = new List<IAndroidActions>();
+    private readonly InputAction m_Android_OnTab;
+    private readonly InputAction m_Android_TapPosition;
+    public struct AndroidActions
+    {
+        private @InputSystem m_Wrapper;
+        public AndroidActions(@InputSystem wrapper) { m_Wrapper = wrapper; }
+        public InputAction @OnTab => m_Wrapper.m_Android_OnTab;
+        public InputAction @TapPosition => m_Wrapper.m_Android_TapPosition;
+        public InputActionMap Get() { return m_Wrapper.m_Android; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(AndroidActions set) { return set.Get(); }
+        public void AddCallbacks(IAndroidActions instance)
+        {
+            if (instance == null || m_Wrapper.m_AndroidActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_AndroidActionsCallbackInterfaces.Add(instance);
+            @OnTab.started += instance.OnOnTab;
+            @OnTab.performed += instance.OnOnTab;
+            @OnTab.canceled += instance.OnOnTab;
+            @TapPosition.started += instance.OnTapPosition;
+            @TapPosition.performed += instance.OnTapPosition;
+            @TapPosition.canceled += instance.OnTapPosition;
+        }
+
+        private void UnregisterCallbacks(IAndroidActions instance)
+        {
+            @OnTab.started -= instance.OnOnTab;
+            @OnTab.performed -= instance.OnOnTab;
+            @OnTab.canceled -= instance.OnOnTab;
+            @TapPosition.started -= instance.OnTapPosition;
+            @TapPosition.performed -= instance.OnTapPosition;
+            @TapPosition.canceled -= instance.OnTapPosition;
+        }
+
+        public void RemoveCallbacks(IAndroidActions instance)
+        {
+            if (m_Wrapper.m_AndroidActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IAndroidActions instance)
+        {
+            foreach (var item in m_Wrapper.m_AndroidActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_AndroidActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public AndroidActions @Android => new AndroidActions(this);
     public interface IPCActions
     {
         void OnOnClick(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
-        void OnChangeControlMode(InputAction.CallbackContext context);
+    }
+    public interface IAndroidActions
+    {
+        void OnOnTab(InputAction.CallbackContext context);
+        void OnTapPosition(InputAction.CallbackContext context);
     }
 }

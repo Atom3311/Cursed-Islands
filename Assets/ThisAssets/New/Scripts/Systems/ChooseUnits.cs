@@ -13,8 +13,10 @@ public partial class ChooseUnits : SystemBase
     private InputAction _inputActionWithClickPosition;
     private InputAction _inputActionWithClick;
     private bool _holding;
+    private bool _startOnUIElement;
     private float2 _startMousePosition;
     private GraphicSettingsComponent _graphicSettings;
+    private RuntimePlatform _platform;
     protected override void OnCreate()
     {
         RequireForUpdate<InformationAboutControlMode>();
@@ -25,14 +27,30 @@ public partial class ChooseUnits : SystemBase
         InputSystem inputSystem = new InputSystem();
         inputSystem.Enable();
 
-        RuntimePlatform platform = Application.platform;
-        if (platform == RuntimePlatform.WindowsEditor || platform == RuntimePlatform.WindowsPlayer)
+        _platform = Application.platform;
+        if (_platform == RuntimePlatform.WindowsEditor || _platform == RuntimePlatform.WindowsPlayer)
         {
             _inputActionWithClick = inputSystem.PC.OnClick;
             _inputActionWithClickPosition = inputSystem.PC.MousePosition;
         }
-        _inputActionWithClick.started += (context) => { _holding = true; };
-        _inputActionWithClick.canceled += (context) => { _holding = false; };
+        else
+        {
+            _inputActionWithClick = inputSystem.Android.OnTab;
+            _inputActionWithClickPosition = inputSystem.Android.TapPosition;
+        }
+        _inputActionWithClick.started += (context) =>
+        {
+            _holding = true;
+            if (_platform == RuntimePlatform.WindowsEditor || _platform == RuntimePlatform.WindowsPlayer)
+                _startOnUIElement = PointOnScreen.PointOnUIElement(_inputActionWithClickPosition.ReadValue<Vector2>());
+            else
+                _startOnUIElement = PointOnScreen.PointOnUIElement(_inputActionWithClickPosition.ReadValue<Touch>().position);
+        };
+        _inputActionWithClick.canceled += (context) =>
+        { 
+            _holding = false;
+            _startOnUIElement = false;
+        };
 
         _graphicSettings = SystemAPI.GetSingleton<GraphicSettingsComponent>();
 
@@ -42,10 +60,19 @@ public partial class ChooseUnits : SystemBase
         _collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
         _controlMode = SystemAPI.GetSingleton<InformationAboutControlMode>();
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-
-        float2 duringMousePosition = _inputActionWithClickPosition.ReadValue<Vector2>();
+        float2 duringMousePosition;
+        if (_platform == RuntimePlatform.WindowsEditor || _platform == RuntimePlatform.WindowsPlayer)
+        {
+            duringMousePosition = _inputActionWithClickPosition.ReadValue<Vector2>();
+        }
+        else
+        {
+            duringMousePosition = _inputActionWithClickPosition.ReadValue<Touch>().position;
+        }
+        
         ControlMode mode = _controlMode.ControlMode;
-        if (_inputActionWithClick.triggered)
+
+        if (_inputActionWithClick.triggered && !_startOnUIElement)
         {
             if (mode != ControlMode.Move && mode != ControlMode.Viewing)
                 ClearAllSelectedUnits();
@@ -56,7 +83,7 @@ public partial class ChooseUnits : SystemBase
             SelectUnit();
         }
 
-        if (_holding && mode == ControlMode.Selection)
+        if (_holding && mode == ControlMode.Selection && !_startOnUIElement)
         {
             RectInGame duringRect;
             duringRect.Position = _startMousePosition;
@@ -65,7 +92,6 @@ public partial class ChooseUnits : SystemBase
             SelectUnitsWithRect(duringRect);
             ChekAllSelectedUnits(duringRect);
         }
-            
 
         ecb.Playback(EntityManager);
         void ClearAllSelectedUnits()

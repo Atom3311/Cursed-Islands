@@ -22,15 +22,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "ChangeControlMode",
-                    "type": "Button",
-                    "id": "a54fe8ae-b7d9-40f5-915a-4783f39e9cea",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -55,15 +46,52 @@
                     "action": "MousePosition",
                     "isComposite": false,
                     "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Android",
+            "id": "83763946-c5cd-4b7a-a8da-f37f9c6c9f3b",
+            "actions": [
+                {
+                    "name": "OnTab",
+                    "type": "Button",
+                    "id": "fb3a3c92-9544-44aa-a267-272335cd88aa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
+                    "name": "TapPosition",
+                    "type": "Value",
+                    "id": "44ffe2de-77c4-4fc4-ab82-2cc058940b59",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
                     "name": "",
-                    "id": "6f2ebc53-8e50-4622-9e5f-26b06188d9fd",
-                    "path": "<Keyboard>/q",
+                    "id": "e94027e7-d25a-4c38-91d8-011a6d8855d7",
+                    "path": "<Touchscreen>/Press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeControlMode",
+                    "action": "OnTab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d8ae5b16-7fe3-4ea4-9282-68c30a294cb1",
+                    "path": "<Touchscreen>/primaryTouch",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TapPosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
