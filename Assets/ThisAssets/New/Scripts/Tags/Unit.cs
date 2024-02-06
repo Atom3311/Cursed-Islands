@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-struct Unit : IComponentData
+public struct Unit : IComponentData
 {
 
 }
