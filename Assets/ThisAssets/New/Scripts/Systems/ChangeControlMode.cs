@@ -4,14 +4,12 @@ public partial class ChangeControlMode : SystemBase
 {
     private ChooseUnitsGUI _chooseUnitsGUI;
     private TextWithControlMode _textWithControlMode;
-    private CameraController _cameraController;
     protected override void OnStartRunning()
     {
         InformationAboutControlMode controlMode = SystemAPI.GetSingleton<InformationAboutControlMode>();
         controlMode.ControlMode = ControlMode.Viewing;
         SystemAPI.SetSingleton(controlMode);
 
-        _cameraController.DuringControlMode = ControlMode.Viewing;
         _textWithControlMode.WriteText(ControlMode.Viewing);
 
         CanChangeControlMode[] _allButtonsWithAbility = Object.FindObjectsByType<CanChangeControlMode>(FindObjectsSortMode.None);
@@ -27,7 +25,6 @@ public partial class ChangeControlMode : SystemBase
 
         _chooseUnitsGUI = Object.FindAnyObjectByType<ChooseUnitsGUI>();
         _textWithControlMode = Object.FindAnyObjectByType<TextWithControlMode>();
-        _cameraController = Object.FindAnyObjectByType<CameraController>();
     }
     private void ChangeMode(ControlMode targetMode)
     {
@@ -36,7 +33,6 @@ public partial class ChangeControlMode : SystemBase
 
         _chooseUnitsGUI.ControlModeIsSelection = targetMode == ControlMode.Selection;
         _textWithControlMode.WriteText(targetMode);
-        _cameraController.DuringControlMode = targetMode;
         SystemAPI.SetSingleton(controlMode);
     }
     protected override void OnUpdate()

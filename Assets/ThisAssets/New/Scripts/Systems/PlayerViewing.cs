@@ -64,6 +64,5 @@ public partial class PlayerViewing : SystemBase
     protected override void OnCreate()
     {
         RequireForUpdate<InformationAboutControlMode>();
-        Enabled = false;
     }
 }
