@@ -93,11 +93,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -876546973899608171, guid: 005f1c5c918e0bc45a5c0b0452dd9899,
         type: 3}
-    - target: {fileID: 5866666021909216657, guid: 90cf1f0e4b0314a48b7eba74d6a0a5bd,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 18cd485d80aaf1540a01919048978a59, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: -8700617353114198275, guid: 90cf1f0e4b0314a48b7eba74d6a0a5bd, type: 3}
@@ -106,5 +101,54 @@ PrefabInstance:
     - {fileID: -2572967989333021709, guid: 90cf1f0e4b0314a48b7eba74d6a0a5bd, type: 3}
     - {fileID: -3824974996824756987, guid: 90cf1f0e4b0314a48b7eba74d6a0a5bd, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 90cf1f0e4b0314a48b7eba74d6a0a5bd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7249580413252476592}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 90cf1f0e4b0314a48b7eba74d6a0a5bd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 722298552067415661}
   m_SourcePrefab: {fileID: 100100000, guid: 90cf1f0e4b0314a48b7eba74d6a0a5bd, type: 3}
+--- !u!1 &5130165437610889292 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 90cf1f0e4b0314a48b7eba74d6a0a5bd,
+    type: 3}
+  m_PrefabInstance: {fileID: 5472836277189848349}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &7249580413252476592
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5130165437610889292}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.38772666, y: 1.6981828, z: 0.43390656}
+  m_Center: {x: 0.01590544, y: 0.9280213, z: 0.07638025}
+--- !u!114 &722298552067415661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5130165437610889292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3132e3d00639e643901dcd2b3c427de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Owner: 0
+  Speed: 3

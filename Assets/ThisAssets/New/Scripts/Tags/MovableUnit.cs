@@ -1,1 +1,1 @@
-﻿public struct MovableUnit : Unity.Entities.IComponentData { }
+﻿public struct MovableUnit : Unity.Entities.IComponentData{}
