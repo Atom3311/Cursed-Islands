@@ -16,7 +16,7 @@ public partial class ChooseUnits : SystemBase
 
     private float2 _startMousePosition;
     private bool _startOnUIElement;
-
+    private Entity _startEntity;
     protected override void OnCreate()
     {
         RequireForUpdate<InformationAboutControlMode>();
@@ -92,6 +92,7 @@ public partial class ChooseUnits : SystemBase
                     WithEntityAccess())
             {
                 ecb.RemoveComponent<ChoosedUnit>(entity);
+                _startEntity = Entity.Null;
             }
             foreach ((
                 RefRO<GraphicOfChooseUnit> graphic,
@@ -130,6 +131,7 @@ public partial class ChooseUnits : SystemBase
             }
             AddGraphicForEntity(targetEntity);
             ecb.AddComponent<ChoosedUnit>(targetEntity);
+            _startEntity = targetEntity;
         }
         void SelectUnitsWithRect(RectInGame targetRect)
         {
@@ -170,6 +172,9 @@ public partial class ChooseUnits : SystemBase
             {
 
                 float3 positionUnitOnScreen = Camera.main.WorldToScreenPoint(transform.ValueRO.Position);
+                if (entity == _startEntity)
+                    continue;
+
                 if (!targetRect.Contains(new float2(positionUnitOnScreen.x, positionUnitOnScreen.y)))
                 {
                     ecb.RemoveComponent<ChoosedUnit>(entity);
