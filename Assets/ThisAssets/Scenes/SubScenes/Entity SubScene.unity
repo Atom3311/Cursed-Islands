@@ -662,6 +662,7 @@ GameObject:
   - component: {fileID: 2055779027}
   - component: {fileID: 2055779028}
   - component: {fileID: 2055779029}
+  - component: {fileID: 2055779030}
   m_Layer: 0
   m_Name: Main Entity
   m_TagString: Untagged
@@ -738,6 +739,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dff0252de8305147a5025f758e70519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2055779030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2055779024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce3924a7960b41746ab1162532181af1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gold: 10
+  Wood: 10
+  Food: 10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
