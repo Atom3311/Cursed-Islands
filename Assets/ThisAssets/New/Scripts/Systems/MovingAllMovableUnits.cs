@@ -7,12 +7,16 @@ partial struct MovingAllMovableUnits : ISystem
     {
         foreach ((
             PackageOfMovableUnit package,
-            RefRW<LocalTransform> transform) in
+            RefRW<LocalTransform> transform,
+            RefRW<AttentionPoint> attentionPoint) in
             SystemAPI.Query<
                 PackageOfMovableUnit,
-                RefRW<LocalTransform>>())
+                RefRW<LocalTransform>,
+                RefRW<AttentionPoint>>())
         {
             float3? targetPoint = package.MovePoint.ValueRO.PointInWorld;
+            attentionPoint.ValueRW.Point = targetPoint;
+
             if (!targetPoint.HasValue)
                 continue;
 
@@ -31,17 +35,17 @@ partial struct MovingAllMovableUnits : ISystem
             direction = math.normalize(direction);
 
             float move = package.SpeedComponent.ValueRO.Speed * SystemAPI.Time.DeltaTime;
-            transform.ValueRW = transform.ValueRO.WithRotation(quaternion.LookRotation(targetPoint.Value - position, math.up()));
+
             if (math.distance(position, targetPoint.Value) <= move)
             {
                 transform.ValueRW.Position = targetPoint.Value;
                 package.MovePoint.ValueRW.PointInWorld = null;
+                attentionPoint.ValueRW.Point = null;
             }
             else
             {
                 transform.ValueRW.Position += direction * move;
             }
-            
         }
     }
 }

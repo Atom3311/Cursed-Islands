@@ -14,6 +14,7 @@ public class HullOfMovableUnit : MonoBehaviour
             AddComponent(targetEntity, new OwnerComponent() { Owner = authoring.Owner });
             AddComponent(targetEntity , new SpeedComponent() { Speed = authoring.Speed });
             AddComponent<MovePoint>(targetEntity);
+            AddComponent<AttentionPoint>(targetEntity);
         }
     }
 }
