@@ -3,5 +3,4 @@
 struct OwnerComponent : IComponentData
 {
     public OwnersInGame Owner;
-
 }
