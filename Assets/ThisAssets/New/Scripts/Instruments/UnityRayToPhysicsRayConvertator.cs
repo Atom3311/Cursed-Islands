@@ -1,18 +1,17 @@
-﻿using UnityRay = UnityEngine;
-using Physics = Unity.Physics;
+﻿using Unity.Physics;
 using Unity.Mathematics;
-public static class UnityRayToPhysicsRayConvertator
+public static class GetCameraPhysicsRaycast
 {
-    public static Physics.Ray Convert(UnityRay.Ray targetRay)
+    public static RaycastInput Get(float2 pointOnScreen)
     {
-        float3 position = targetRay.origin;
-        float3 direction = targetRay.direction;
-
-        Physics.Ray finalRay = new Physics.Ray();
-        finalRay.Origin = position;
-        finalRay.Displacement = direction;
-
-        return finalRay;
-    } 
+        UnityEngine.Ray unityRay = UnityEngine.Camera.main.ScreenPointToRay(new float3(pointOnScreen, 0));
+        RaycastInput raycastInput = new RaycastInput()
+        {
+            Start = unityRay.origin,
+            End = unityRay.origin + unityRay.direction * Constants.MouseRange,
+            Filter = CollisionFilter.Default
+        };
+        return raycastInput;
+    }
 
 }

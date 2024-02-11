@@ -44,7 +44,7 @@ public partial class ChooseUnits : SystemBase
             _startOnUIElement = PointOnScreen.PointOnUIElement(duringMousePosition);
             if (!_startOnUIElement)
             {
-                if (mode != ControlMode.Move && mode != ControlMode.Viewing)
+                if (mode != ControlMode.Order && mode != ControlMode.Viewing)
                     ClearAllSelectedUnits();
 
                 if (mode != ControlMode.Selection)

@@ -8,7 +8,7 @@ public class TextWithControlMode : MonoBehaviour
     private Text _textComponent;
     private void Awake()
     {
-        _namesOfControlModes[(int)ControlMode.Move] = "Перемещение";
+        _namesOfControlModes[(int)ControlMode.Order] = "Приказы";
         _namesOfControlModes[(int)ControlMode.Selection] = "Выбор";
         _namesOfControlModes[(int)ControlMode.Viewing] = "Просмотр";
         _textComponent = GetComponent<Text>();

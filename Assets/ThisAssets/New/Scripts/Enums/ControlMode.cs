@@ -1,6 +1,6 @@
 ﻿public enum ControlMode
 {
     Viewing,
-    Move,
+    Order,
     Selection
 }

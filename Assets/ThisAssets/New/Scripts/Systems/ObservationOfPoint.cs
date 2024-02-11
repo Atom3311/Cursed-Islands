@@ -14,7 +14,9 @@ public partial struct ObservationOfPoint : ISystem
             if (!targetPoint.ValueRO.Point.HasValue)
                 continue;
 
-            transform.ValueRW = transform.ValueRO.WithRotation(quaternion.LookRotation(targetPoint.ValueRO.Point.Value - transform.ValueRO.Position, math.up()));
+            float3 newPoint = targetPoint.ValueRO.Point.Value;
+            newPoint.y = transform.ValueRO.Position.y;
+            transform.ValueRW = transform.ValueRO.WithRotation(quaternion.LookRotation(newPoint - transform.ValueRO.Position, math.up()));
 
         }
     }
