@@ -7,6 +7,7 @@ partial struct PaddlerPlayerMovePoint : ISystem
     private void OnCreate(ref SystemState state)
     {
         _queryForChoosedUnits = state.GetEntityQuery(typeof(ChoosedUnit));
+        state.RequireForUpdate<OrderInformation>();
     }
     private void OnUpdate(ref SystemState state)
     {

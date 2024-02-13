@@ -2,7 +2,7 @@
 using Unity.Physics;
 using Unity.Mathematics;
 using Unity.Collections;
-[UpdateAfter(typeof(InputHandler))]
+using System;
 public partial struct OrdersController : ISystem
 {
     private void OnCreate(ref SystemState state)
@@ -32,12 +32,17 @@ public partial struct OrdersController : ISystem
                 RaycastInput raycast = GetCameraPhysicsRaycast.Get(mousePosition);
                 NativeList<RaycastHit> hits = new NativeList<RaycastHit>(Allocator.FirstUserIndex);
                 collisionWorld.CastRay(raycast, ref hits);
-                foreach(RaycastHit hit in hits)
+                RaycastHit[] standartArrayWithHits = hits.AsArray().ToArray();
+
+                Array.Sort(standartArrayWithHits, (hit1, hit2) => 
                 {
-                    Entity hitEntity = hit.Entity;
-                    UnityEngine.Debug.Log(state.EntityManager.GetName(hitEntity));
-                }
-                foreach (RaycastHit hit in hits)
+                    float3 startPosition = raycast.Start;
+                    float firstDistance = math.length(hit1.Position - startPosition);
+                    float secondDistance = math.length(hit2.Position - startPosition);
+                    return firstDistance.CompareTo(secondDistance);
+                });
+
+                foreach (RaycastHit hit in standartArrayWithHits)
                 {
                     Entity hitEntity = hit.Entity;
                     if (SystemAPI.HasComponent<ResourceInformation>(hitEntity))

@@ -8,6 +8,7 @@ public partial struct OrderToExtruct : ISystem
     private void OnCreate(ref SystemState state)
     {
         _entityQuery = state.GetEntityQuery(typeof(ChoosedUnit));
+        state.RequireForUpdate<OrderInformation>();
     }
     private void OnUpdate(ref SystemState state)
     {
