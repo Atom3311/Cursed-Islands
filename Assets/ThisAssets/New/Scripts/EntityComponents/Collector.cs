@@ -2,7 +2,8 @@
 
 struct Collector : IComponentData
 {
-    public Resource TargetResource;
+    public Resource TargetResourceType;
     public float Speed;
     public float Range;
+    public ResourceInformation TargetResourceEntity;
 }

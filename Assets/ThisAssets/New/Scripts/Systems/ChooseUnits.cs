@@ -203,4 +203,17 @@ public partial class ChooseUnits : SystemBase
 
         #endregion
     }
+    protected override void OnStopRunning()
+    {
+        EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
+
+        foreach ((
+            RefRO<ChoosedUnit> chooseUnit,
+            Entity entity) in SystemAPI.Query
+            <RefRO<ChoosedUnit>>().WithEntityAccess())
+        {
+            ecb.RemoveComponent<ChoosedUnit>(entity);
+        }
+    }
+    
 }

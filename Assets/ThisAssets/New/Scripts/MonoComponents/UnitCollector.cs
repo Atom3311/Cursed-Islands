@@ -14,11 +14,10 @@ public class UnitCollector : MonoBehaviour
             Entity targetEntity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(targetEntity, new Collector()
             {
-                TargetResource = authoring.TargetResource,
+                TargetResourceType = authoring.TargetResource,
                 Speed = authoring.Speed,
                 Range = authoring.Range
             });
-            AddComponent<TargetResourceInformation>(targetEntity);
         }
     }
 }

@@ -4,39 +4,50 @@ using Unity.Collections;
 [UpdateAfter(typeof(OrdersController))]
 public partial struct OrderToExtruct : ISystem
 {
-    private EntityQuery _entityQuery;
     private void OnCreate(ref SystemState state)
     {
-        _entityQuery = state.GetEntityQuery(typeof(ChoosedUnit));
         state.RequireForUpdate<OrderInformation>();
     }
     private void OnUpdate(ref SystemState state)
     {
-        var orderInformation = SystemAPI.GetSingleton<OrderInformation>();
+        //var orderInformation = SystemAPI.GetSingleton<OrderInformation>();
+        //EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
-        if (orderInformation.DuringOrder != Order.Extruct)
-            return;
+        //if(orderInformation.DuringOrder != Order.Extruct)
+        //{
+        //    if (orderInformation.DuringOrder != Order.None)
+        //    {
+        //        UnityEngine.Debug.Log(1);
+        //        foreach ((
+        //        RefRO<Collector> collector,
+        //        RefRO<ChoosedUnit> choosedUnit,
+        //        Entity entity) in SystemAPI.Query<
+        //            RefRO<Collector>,
+        //            RefRO<ChoosedUnit>>().WithEntityAccess())
+        //        {
+        //            ecb.RemoveComponent<ExtructAction>(entity);
+        //        }
+        //        ecb.Playback(state.EntityManager);
+        //    }
+        //    return;
+        //}
 
-        if (_entityQuery.CalculateEntityCount() == 0)
-            return;
+        //Entity targetEntity = orderInformation.TargetEntity;
+        //LocalTransform transform = SystemAPI.GetComponent<LocalTransform>(targetEntity);
 
-        Entity targetEntity = orderInformation.TargetEntity;
-        LocalTransform transform = SystemAPI.GetComponent<LocalTransform>(targetEntity);
-
-        EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach((
-            PackageOfMovableUnit package,
-            RefRO<Collector> collector,
-            RefRO<ChoosedUnit> choosedUnit,
-            Entity entity) in SystemAPI.Query<
-                PackageOfMovableUnit,
-                RefRO<Collector>,
-                RefRO<ChoosedUnit>>().WithEntityAccess())
-        {
-            package.MovePoint.ValueRW.PointInWorld = transform.Position;
-            ecb.AddComponent<ExtructAction>(entity);
-            ecb.SetComponent(entity, new TargetResourceInformation() { TargetResource = targetEntity });
-        }
-        ecb.Playback(state.EntityManager);
+        //foreach((
+        //    PackageOfMovableUnit package,
+        //    RefRW<Collector> collector,
+        //    RefRO<ChoosedUnit> choosedUnit,
+        //    Entity entity) in SystemAPI.Query<
+        //        PackageOfMovableUnit,
+        //        RefRW<Collector>,
+        //        RefRO<ChoosedUnit>>().WithEntityAccess())
+        //{
+        //    package.MovePoint.ValueRW.PointInWorld = transform.Position;
+        //    ecb.AddComponent<ExtructAction>(entity);
+        //    collector.ValueRW.TargetResourceEntity = SystemAPI.GetComponent<ResourceInformation>(targetEntity);
+        //}
+        //ecb.Playback(state.EntityManager);
     }
 }
