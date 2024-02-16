@@ -21,7 +21,6 @@ public partial class ChangeControlMode : SystemBase
         foreach(CanChangeControlMode button in _allButtonsWithAbility)
             button.ThisButton.onClick.AddListener(() => { ChangeMode(button.TargetMode); });
 
-        Enabled = false;
     }
     private void ChangeMode(ControlMode targetMode)
     {

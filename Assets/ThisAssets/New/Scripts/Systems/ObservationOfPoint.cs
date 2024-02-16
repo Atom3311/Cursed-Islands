@@ -6,9 +6,9 @@ public partial struct ObservationOfPoint : ISystem
     private void OnUpdate(ref SystemState state)
     {
         foreach ((
-            RefRO<AttentionPoint> targetPoint,
+            RefRW<AttentionPoint> targetPoint,
             RefRW<LocalTransform> transform) in SystemAPI.Query<
-                RefRO<AttentionPoint>,
+                RefRW<AttentionPoint>,
                 RefRW<LocalTransform>>())
         {
             if (!targetPoint.ValueRO.Point.HasValue)
@@ -16,6 +16,13 @@ public partial struct ObservationOfPoint : ISystem
 
             float3 newPoint = targetPoint.ValueRO.Point.Value;
             newPoint.y = transform.ValueRO.Position.y;
+
+            if (Equals(newPoint, transform.ValueRO.Position))
+            {
+                targetPoint.ValueRW.Point = null;
+                return;
+            }
+
             transform.ValueRW = transform.ValueRO.WithRotation(quaternion.LookRotation(newPoint - transform.ValueRO.Position, math.up()));
 
         }

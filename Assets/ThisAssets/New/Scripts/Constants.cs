@@ -4,4 +4,5 @@
     public const float RectForUnit = 1.5f;
     public const float SpeedOffsetCameraOnPixel = 0.1f;
     public const string NameOfFieldForAnimationRun = "Run";
+    public const string NameOfFieldForAnimationExtruct = "Extruct";
 }

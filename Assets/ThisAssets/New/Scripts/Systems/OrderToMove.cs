@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 [UpdateAfter(typeof(OrdersController))]
-partial struct PaddlerPlayerMovePoint : ISystem
+partial struct OrderToMove : ISystem
 {
     private EntityQuery _queryForChoosedUnits;
     private void OnCreate(ref SystemState state)
@@ -22,18 +22,22 @@ partial struct PaddlerPlayerMovePoint : ISystem
 
         foreach ((
             RefRW<MovePoint> movePoint,
-            RefRO<ChoosedUnit> choosedUnit) in SystemAPI.Query<
+            RefRO<ChoosedUnit> choosedUnit,
+            RefRW<AttentionPoint> attentionPoint) in SystemAPI.Query<
                 RefRW<MovePoint>,
-                RefRO<ChoosedUnit>>())
+                RefRO<ChoosedUnit>,
+                RefRW<AttentionPoint>>())
         {
             if (countOfEntities == 1)
             {
                 movePoint.ValueRW.PointInWorld = targetPoint;
+                attentionPoint.ValueRW.Point = targetPoint;
             }
             else
             {
                 float3 randomPoint = GetRandomPointFromRect.GetRandomPoint(targetPoint, math.sqrt(Constants.RectForUnit * countOfEntities));
                 movePoint.ValueRW.PointInWorld = randomPoint;
+                attentionPoint.ValueRW.Point = randomPoint;
             }
         }
     }

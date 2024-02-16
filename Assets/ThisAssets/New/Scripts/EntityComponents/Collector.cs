@@ -3,7 +3,8 @@
 struct Collector : IComponentData
 {
     public Resource TargetResourceType;
-    public float Speed;
+    public float NeededTime;
+    public float DuringTime;
     public float Range;
-    public ResourceInformation TargetResourceEntity;
+    public Entity TargetResourceEntity;
 }

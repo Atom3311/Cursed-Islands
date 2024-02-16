@@ -4,7 +4,7 @@ using Unity.Entities;
 public class UnitCollector : MonoBehaviour
 {
     public Resource TargetResource;
-    public float Speed;
+    public float NeededTime;
     public float Range;
 
     private class ThisBaker : Baker<UnitCollector>
@@ -15,7 +15,7 @@ public class UnitCollector : MonoBehaviour
             AddComponent(targetEntity, new Collector()
             {
                 TargetResourceType = authoring.TargetResource,
-                Speed = authoring.Speed,
+                NeededTime = authoring.NeededTime,
                 Range = authoring.Range
             });
         }

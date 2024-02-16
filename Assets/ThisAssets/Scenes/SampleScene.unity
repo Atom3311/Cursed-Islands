@@ -697,7 +697,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartText: "\u0415\u0434\u0430: "
-  TargetResource: 0
+  TargetResource: 2
 --- !u!114 &429563536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -978,7 +978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartText: "\u0414\u0435\u0440\u0435\u0432\u043E: "
-  TargetResource: 0
+  TargetResource: 1
 --- !u!114 &801950834
 MonoBehaviour:
   m_ObjectHideFlags: 0

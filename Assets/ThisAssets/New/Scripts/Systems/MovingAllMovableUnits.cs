@@ -1,6 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Transforms;
 using Unity.Mathematics;
+[UpdateAfter(typeof(ObservationOfPoint))]
 partial struct MovingAllMovableUnits : ISystem
 {
     private void OnUpdate(ref SystemState state)
@@ -15,7 +16,6 @@ partial struct MovingAllMovableUnits : ISystem
                 RefRW<AttentionPoint>>())
         {
             float3? targetPoint = package.MovePoint.ValueRO.PointInWorld;
-            attentionPoint.ValueRW.Point = targetPoint;
 
             if (!targetPoint.HasValue)
                 continue;
@@ -28,7 +28,6 @@ partial struct MovingAllMovableUnits : ISystem
                     position.y,
                     targetPoint.Value.z
                 );
-
 
             float3 direction = targetPoint.Value - position;
 
