@@ -95,9 +95,9 @@ public partial class ChooseUnits : SystemBase
                 _startEntity = Entity.Null;
             }
             foreach ((
-                RefRO<GraphicOfChooseUnit> graphic,
+                RefRO<GraphicOfChooseMovableUnit> graphic,
                 Entity entity) in SystemAPI.Query<
-                    RefRO<GraphicOfChooseUnit>>().
+                    RefRO<GraphicOfChooseMovableUnit>>().
                     WithEntityAccess())
             {
                 ecb.DestroyEntity(entity);
@@ -179,9 +179,9 @@ public partial class ChooseUnits : SystemBase
                 {
                     ecb.RemoveComponent<ChoosedUnit>(entity);
                     foreach ((
-                        RefRO<GraphicOfChooseUnit> graphic,
+                        RefRO<GraphicOfChooseMovableUnit> graphic,
                         Entity entityOfGraphic) in SystemAPI.Query<
-                            RefRO<GraphicOfChooseUnit>>().
+                            RefRO<GraphicOfChooseMovableUnit>>().
                             WithEntityAccess())
                     {
                         Parent parentOfGraphic = SystemAPI.GetComponent<Parent>(entityOfGraphic);
@@ -196,9 +196,9 @@ public partial class ChooseUnits : SystemBase
         }
         void AddGraphicForEntity(Entity targetEntity)
         {
-            Entity targetGraphic = ecb.Instantiate(_graphicSettings.GraphicOfChooseUnit);
+            Entity targetGraphic = ecb.Instantiate(_graphicSettings.GraphicOfChooseMovableUnit);
             ecb.AddComponent(targetGraphic, new Parent() { Value = targetEntity });
-            ecb.AddComponent<GraphicOfChooseUnit>(targetGraphic);
+            ecb.AddComponent<GraphicOfChooseMovableUnit>(targetGraphic);
         }
 
         #endregion

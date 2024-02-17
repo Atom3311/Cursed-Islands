@@ -11,10 +11,26 @@ public partial struct OrderToExtruct : ISystem
     private void OnUpdate(ref SystemState state)
     {
         var orderInformation = SystemAPI.GetSingleton<OrderInformation>();
+        var input = SystemAPI.GetSingleton<InformationAboutInputPlayer>();
+        var graphicSettings = SystemAPI.GetSingleton<GraphicSettingsComponent>();
+
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
+        if (input.ClickDown)
+        {
+            foreach(var (graphicTag, entity) in SystemAPI.Query<
+                RefRO<GraphicOfResource>>()
+                .WithEntityAccess())
+            {
+                ecb.DestroyEntity(entity);
+            }
+        }
+
         if (orderInformation.DuringOrder == Order.None)
+        {
+            ecb.Playback(state.EntityManager);
             return;
+        }
 
         if (orderInformation.DuringOrder != Order.Extruct)
         {
@@ -40,6 +56,10 @@ public partial struct OrderToExtruct : ISystem
 
         Entity targetEntity = orderInformation.TargetEntity;
         LocalTransform transform = SystemAPI.GetComponent<LocalTransform>(targetEntity);
+
+        Entity graphic = ecb.Instantiate(graphicSettings.GraphicOfChooseResource);
+        ecb.AddComponent<GraphicOfResource>(graphic);
+        ecb.AddComponent(graphic, new Parent() { Value = targetEntity });
 
         foreach ((
             PackageOfMovableUnit package,

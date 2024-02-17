@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5259760653291465583}
   - component: {fileID: 8341287842209391791}
   m_Layer: 0
-  m_Name: Choose graphic
+  m_Name: Choose movable unit graphic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

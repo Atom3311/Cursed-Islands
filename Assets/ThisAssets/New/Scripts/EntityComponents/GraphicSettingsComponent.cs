@@ -2,5 +2,6 @@
 
 public struct GraphicSettingsComponent : IComponentData
 {
-    public Entity GraphicOfChooseUnit;
+    public Entity GraphicOfChooseMovableUnit;
+    public Entity GraphicOfChooseResource;
 }
