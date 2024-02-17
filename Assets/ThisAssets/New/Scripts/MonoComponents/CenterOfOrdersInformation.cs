@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using Unity.Entities;
-public class CenterOfOrderInformation : MonoBehaviour
+public class CenterOfOrdersInformation : MonoBehaviour
 {
-    private class ThisBaker : Baker<CenterOfOrderInformation>
+    private class ThisBaker : Baker<CenterOfOrdersInformation>
     {
-        public override void Bake(CenterOfOrderInformation authoring)
+        public override void Bake(CenterOfOrdersInformation authoring)
         {
             Entity targetEntity = GetEntity(TransformUsageFlags.None);
             AddComponent<OrderInformation>(targetEntity);

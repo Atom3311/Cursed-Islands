@@ -39,6 +39,8 @@ public partial class ChooseUnits : SystemBase
 
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
+        ClearAllDeadUnits();
+
         if (_input.ClickDown)
         {
             _startOnUIElement = PointOnScreen.PointOnUIElement(duringMousePosition);
@@ -80,7 +82,7 @@ public partial class ChooseUnits : SystemBase
 
         ecb.Playback(EntityManager);
 
-        
+
         #region Methods
 
         void ClearAllSelectedUnits()
@@ -120,8 +122,20 @@ public partial class ChooseUnits : SystemBase
 
             Entity targetEntity = hitInformation.Entity;
 
-            if (!SystemAPI.HasComponent<Unit>(targetEntity) || !SystemAPI.HasComponent<OwnerComponent>(targetEntity))
+            if (!SystemAPI.HasComponent<Unit>(targetEntity) ||
+                !SystemAPI.HasComponent<OwnerComponent>(targetEntity))
                 return;
+
+            if (SystemAPI.HasComponent<HealthState>(targetEntity))
+            {
+                HealthState healthState = SystemAPI.GetComponent<HealthState>(targetEntity);
+                if (healthState.IsDead)
+                    return;
+            }
+            else
+            {
+                return;
+            }
 
             OwnerComponent ownerComponent = SystemAPI.GetComponent<OwnerComponent>(targetEntity);
 
@@ -139,13 +153,18 @@ public partial class ChooseUnits : SystemBase
                 RefRO<LocalTransform> transform,
                 RefRO<Unit> unit,
                 RefRO<OwnerComponent> owner,
+                RefRO<HealthState> healthState,
                 Entity entity) in SystemAPI.Query<
                     RefRO<LocalTransform>,
                     RefRO<Unit>,
-                    RefRO<OwnerComponent>
+                    RefRO<OwnerComponent>,
+                    RefRO<HealthState>
                     >().WithEntityAccess())
             {
                 if (SystemAPI.HasComponent<ChoosedUnit>(entity))
+                    continue;
+
+                if (healthState.ValueRO.IsDead)
                     continue;
 
                 if (owner.ValueRO.Owner != OwnersInGame.Player)
@@ -194,6 +213,28 @@ public partial class ChooseUnits : SystemBase
                 }
             }
         }
+
+        void ClearAllDeadUnits()
+        {
+            foreach (var (choosedTag, healthState, entity) in SystemAPI.Query<
+                RefRO<ChoosedUnit>,
+                RefRO<HealthState>>()
+                .WithEntityAccess())
+            {
+                if (!healthState.ValueRO.IsDead)
+                    return;
+
+                ecb.RemoveComponent<ChoosedUnit>(entity);
+                DynamicBuffer<Child> childs = EntityManager.GetBuffer<Child>(entity);
+                foreach (Child child in childs)
+                {
+                    Entity childEntity = child.Value;
+                    if (SystemAPI.HasComponent<GraphicOfChooseMovableUnit>(childEntity))
+                        ecb.DestroyEntity(childEntity);
+                }
+            }
+        }
+
         void AddGraphicForEntity(Entity targetEntity)
         {
             Entity targetGraphic = ecb.Instantiate(_graphicSettings.GraphicOfChooseMovableUnit);
@@ -203,17 +244,5 @@ public partial class ChooseUnits : SystemBase
 
         #endregion
     }
-    protected override void OnStopRunning()
-    {
-        EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
-        foreach ((
-            RefRO<ChoosedUnit> chooseUnit,
-            Entity entity) in SystemAPI.Query
-            <RefRO<ChoosedUnit>>().WithEntityAccess())
-        {
-            ecb.RemoveComponent<ChoosedUnit>(entity);
-        }
-    }
-    
 }

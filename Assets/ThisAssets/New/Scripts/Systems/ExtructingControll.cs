@@ -1,5 +1,6 @@
 ﻿using Unity.Entities;
 using Unity.Collections;
+using Unity.Transforms;
 public partial struct ExtructingControll : ISystem
 {
     private void OnCreate(ref SystemState state)
@@ -39,6 +40,12 @@ public partial struct ExtructingControll : ISystem
                     }
                 }
                 ecb.DestroyEntity(targetEntity);
+                Entity duringGraphicResource = SystemAPI.GetSingletonEntity<GraphicOfResource>();
+                Parent parent = SystemAPI.GetComponent<Parent>(duringGraphicResource);
+
+                if (parent.Value == targetEntity)
+                    ecb.DestroyEntity(duringGraphicResource);
+
                 continue;
             }
             if(collector.ValueRO.DuringTime >= collector.ValueRO.NeededTime)

@@ -7,6 +7,8 @@ public partial struct OrderToExtruct : ISystem
     private void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<OrderInformation>();
+        state.RequireForUpdate<InformationAboutInputPlayer>();
+        state.RequireForUpdate<GraphicSettingsComponent>();
     }
     private void OnUpdate(ref SystemState state)
     {
