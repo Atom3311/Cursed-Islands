@@ -7,14 +7,18 @@ public partial struct ExtructActionController : ISystem
     private void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach (var (actionTag, attantionPoint, collector, transform, package, entity) in SystemAPI.Query<
+        foreach (var (actionTag, healthState, attantionPoint, collector, transform, package, entity) in SystemAPI.Query<
             RefRO<ExtructAction>,
+            RefRO<HealthState>,
             RefRW<AttentionPoint>,
             RefRO<Collector>,
             RefRW<LocalTransform>,
             PackageOfMovableUnit>()
             .WithEntityAccess())
         {
+            if (healthState.ValueRO.IsDead)
+                continue;
+
             Entity target = collector.ValueRO.TargetResourceEntity;
 
             if (target == Entity.Null)
