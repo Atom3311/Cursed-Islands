@@ -48,11 +48,16 @@ public partial struct ExtructingControll : ISystem
                     }
                 }
                 ecb.DestroyEntity(targetEntity);
-                Entity duringGraphicResource = SystemAPI.GetSingletonEntity<GraphicOfResource>();
-                Parent parent = SystemAPI.GetComponent<Parent>(duringGraphicResource);
-
-                if (parent.Value == targetEntity)
-                    ecb.DestroyEntity(duringGraphicResource);
+                if (SystemAPI.HasBuffer<Child>(targetEntity))
+                {
+                    DynamicBuffer<Child> childs = SystemAPI.GetBuffer<Child>(targetEntity);
+                    foreach (Child child in childs)
+                    {
+                        Entity childEntity = child.Value;
+                        if (SystemAPI.HasComponent<GraphicOfResource>(childEntity))
+                            ecb.DestroyEntity(childEntity);
+                    }
+                }
 
                 continue;
             }

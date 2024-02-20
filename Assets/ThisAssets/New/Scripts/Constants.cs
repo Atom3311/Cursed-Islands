@@ -7,4 +7,5 @@
     public const string NameOfFieldForAnimationRun = "Run";
     public const string NameOfFieldForAnimationExtruct = "Extruct";
     public const string NameOfFieldForAnimationDead = "Dead";
+    public const string NameOfFieldForAnimationAttack = "Attack";
 }
