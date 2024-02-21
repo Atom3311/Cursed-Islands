@@ -2814,6 +2814,8 @@ MonoBehaviour:
     type: 3}
   GraphicOfChooseResource: {fileID: 3898467644907347328, guid: 58d603d2dd9439b41bd367b6586fc0e6,
     type: 3}
+  GraphicOfChooseEnemy: {fileID: 1021447769895647341, guid: 87dc3fe5e9bf00a4caaf37eb7a02098d,
+    type: 3}
 --- !u!114 &2055779031
 MonoBehaviour:
   m_ObjectHideFlags: 0
