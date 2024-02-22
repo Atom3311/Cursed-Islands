@@ -2,6 +2,12 @@
 public struct HealthState : IComponentData
 {
     public int Health;
-    public bool IsDead;
+    public bool IsDead
+    {
+        get
+        {
+            return Health <= 0;
+        }
+    }
     public float DuringDeadTime;
 }

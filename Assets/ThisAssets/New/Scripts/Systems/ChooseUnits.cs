@@ -222,7 +222,7 @@ public partial class ChooseUnits : SystemBase
                 .WithEntityAccess())
             {
                 if (!healthState.ValueRO.IsDead)
-                    return;
+                    continue;
 
                 ecb.RemoveComponent<ChoosedUnit>(entity);
                 DynamicBuffer<Child> childs = EntityManager.GetBuffer<Child>(entity);

@@ -12,12 +12,20 @@ public partial struct ExtructingControll : ISystem
         InformationAboutResources resources = SystemAPI.GetSingleton<InformationAboutResources>();
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
-        foreach (var (extructingTag, animator, collector, entity) in SystemAPI.Query<
+        foreach (var (extructingTag, healthState, animator, collector, entity) in SystemAPI.Query<
             RefRO<Extructing>,
+            RefRO<HealthState>,
             AnimatorComponent,
             RefRW<Collector>>()
             .WithEntityAccess())
         {
+            if (healthState.ValueRO.IsDead)
+            {
+                ecb.RemoveComponent<Extructing>(entity);
+                //animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, false);
+                continue;
+            }
+
             Entity targetEntity = collector.ValueRO.TargetResourceEntity;
             if (targetEntity == Entity.Null)
             {
@@ -40,11 +48,16 @@ public partial struct ExtructingControll : ISystem
                     }
                 }
                 ecb.DestroyEntity(targetEntity);
-                Entity duringGraphicResource = SystemAPI.GetSingletonEntity<GraphicOfResource>();
-                Parent parent = SystemAPI.GetComponent<Parent>(duringGraphicResource);
-
-                if (parent.Value == targetEntity)
-                    ecb.DestroyEntity(duringGraphicResource);
+                if (SystemAPI.HasBuffer<Child>(targetEntity))
+                {
+                    DynamicBuffer<Child> childs = SystemAPI.GetBuffer<Child>(targetEntity);
+                    foreach (Child child in childs)
+                    {
+                        Entity childEntity = child.Value;
+                        if (SystemAPI.HasComponent<GraphicOfResource>(childEntity))
+                            ecb.DestroyEntity(childEntity);
+                    }
+                }
 
                 continue;
             }

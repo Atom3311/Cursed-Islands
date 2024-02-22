@@ -24,42 +24,61 @@ public partial struct OrdersController : ISystem
             TargetPoint = float3.zero
         };
 
-        if(controlMode.ControlMode == ControlMode.Order)
+        if (controlMode.ControlMode != ControlMode.Order)
         {
-            if (input.ClickDown && !PointOnScreen.PointOnUIElement(input.MousePosition))
+            SystemAPI.SetSingleton(newInformation);
+            return;
+        }
+
+        if (!(input.ClickDown && !PointOnScreen.PointOnUIElement(input.MousePosition)))
+        {
+            SystemAPI.SetSingleton(newInformation);
+            return;
+        }
+
+        float2 mousePosition = input.MousePosition;
+        RaycastInput raycast = GetCameraPhysicsRaycast.Get(mousePosition);
+        NativeList<RaycastHit> hits = new NativeList<RaycastHit>(Allocator.FirstUserIndex);
+        collisionWorld.CastRay(raycast, ref hits);
+        RaycastHit[] standartArrayWithHits = hits.AsArray().ToArray();
+
+        Array.Sort(standartArrayWithHits, (hit1, hit2) => 
+        {
+            float3 startPosition = raycast.Start;
+            float firstDistance = math.length(hit1.Position - startPosition);
+            float secondDistance = math.length(hit2.Position - startPosition);
+            return firstDistance.CompareTo(secondDistance);
+        });
+
+        foreach (RaycastHit hit in standartArrayWithHits)
+        {
+            Entity hitEntity = hit.Entity;
+            if (SystemAPI.HasComponent<HealthState>(hitEntity))
             {
-                float2 mousePosition = input.MousePosition;
-                RaycastInput raycast = GetCameraPhysicsRaycast.Get(mousePosition);
-                NativeList<RaycastHit> hits = new NativeList<RaycastHit>(Allocator.FirstUserIndex);
-                collisionWorld.CastRay(raycast, ref hits);
-                RaycastHit[] standartArrayWithHits = hits.AsArray().ToArray();
+                HealthState healthState = SystemAPI.GetComponent<HealthState>(hitEntity);
+                OwnersInGame targetOwner = SystemAPI.GetComponent<OwnerComponent>(hitEntity).Owner;
 
-                Array.Sort(standartArrayWithHits, (hit1, hit2) => 
-                {
-                    float3 startPosition = raycast.Start;
-                    float firstDistance = math.length(hit1.Position - startPosition);
-                    float secondDistance = math.length(hit2.Position - startPosition);
-                    return firstDistance.CompareTo(secondDistance);
-                });
+                if (healthState.IsDead || targetOwner == OwnersInGame.Player)
+                    continue;
 
-                foreach (RaycastHit hit in standartArrayWithHits)
-                {
-                    Entity hitEntity = hit.Entity;
-                    if (SystemAPI.HasComponent<ResourceInformation>(hitEntity))
-                    {
-                        newInformation.DuringOrder = Order.Extruct;
-                        newInformation.TargetEntity = hitEntity;
-                        break;
-                    }
-                    else if (SystemAPI.HasComponent<SurfaceForMove>(hitEntity))
-                    {
-                        newInformation.DuringOrder = Order.Move;
-                        newInformation.TargetPoint = hit.Position;
-                        break;
-                    }
-                }
+                newInformation.DuringOrder = Order.Attack;
+                newInformation.TargetEntity = hitEntity;
+                break;
+            }
+            else if (SystemAPI.HasComponent<ResourceInformation>(hitEntity))
+            {
+                newInformation.DuringOrder = Order.Extruct;
+                newInformation.TargetEntity = hitEntity;
+                break;
+            }
+            else if (SystemAPI.HasComponent<SurfaceForMove>(hitEntity))
+            {
+                newInformation.DuringOrder = Order.Move;
+                newInformation.TargetPoint = hit.Position;
+                break;
             }
         }
+
         SystemAPI.SetSingleton(newInformation);
     }
 }

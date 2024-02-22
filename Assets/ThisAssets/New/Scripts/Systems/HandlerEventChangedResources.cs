@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using Unity.Entities;
+﻿using Unity.Entities;
 public partial class HandlerEventChangedResources : SystemBase
 {
     private InformationAboutResources previousInformationAboutResources;

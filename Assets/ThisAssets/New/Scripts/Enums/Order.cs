@@ -2,5 +2,6 @@
 {
     None,
     Move,
-    Extruct
+    Extruct,
+    Attack
 }

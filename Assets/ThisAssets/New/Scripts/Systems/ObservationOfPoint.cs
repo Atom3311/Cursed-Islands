@@ -7,10 +7,15 @@ public partial struct ObservationOfPoint : ISystem
     {
         foreach ((
             RefRW<AttentionPoint> targetPoint,
-            RefRW<LocalTransform> transform) in SystemAPI.Query<
+            RefRW<LocalTransform> transform,
+            RefRO<HealthState> healthState) in SystemAPI.Query<
                 RefRW<AttentionPoint>,
-                RefRW<LocalTransform>>())
+                RefRW<LocalTransform>,
+                RefRO<HealthState>>())
         {
+            if (healthState.ValueRO.IsDead)
+                continue;
+
             if (!targetPoint.ValueRO.Point.HasValue)
                 continue;
 

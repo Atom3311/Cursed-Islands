@@ -9,12 +9,17 @@ partial struct MovingAllMovableUnits : ISystem
         foreach ((
             PackageOfMovableUnit package,
             RefRW<LocalTransform> transform,
-            RefRW<AttentionPoint> attentionPoint) in
+            RefRW<AttentionPoint> attentionPoint,
+            RefRO<HealthState> healthState) in
             SystemAPI.Query<
                 PackageOfMovableUnit,
                 RefRW<LocalTransform>,
-                RefRW<AttentionPoint>>())
+                RefRW<AttentionPoint>,
+                RefRO<HealthState>>())
         {
+            if (healthState.ValueRO.IsDead)
+                continue;
+
             float3? targetPoint = package.MovePoint.ValueRO.PointInWorld;
 
             if (!targetPoint.HasValue)

@@ -6,21 +6,23 @@ public partial class ChangeControlMode : SystemBase
     protected override void OnCreate()
     {
         RequireForUpdate<InformationAboutControlMode>();
-
-        _textWithControlMode = Object.FindAnyObjectByType<TextWithControlMode>();
     }
-    protected override void OnStartRunning()
+    protected override void OnUpdate()
     {
+        _textWithControlMode = Object.FindAnyObjectByType<TextWithControlMode>();
         InformationAboutControlMode controlMode = SystemAPI.GetSingleton<InformationAboutControlMode>();
         controlMode.ControlMode = ControlMode.Viewing;
         SystemAPI.SetSingleton(controlMode);
 
         _textWithControlMode.WriteText(ControlMode.Viewing);
 
-        CanChangeControlMode[] _allButtonsWithAbility = Object.FindObjectsByType<CanChangeControlMode>(FindObjectsSortMode.None);
-        foreach(CanChangeControlMode button in _allButtonsWithAbility)
-            button.ThisButton.onClick.AddListener(() => { ChangeMode(button.TargetMode); });
+        CanChangeControlMode[] allButtonsWithAbility = Object.FindObjectsByType<CanChangeControlMode>(FindObjectsSortMode.None);
 
+        foreach (CanChangeControlMode button in allButtonsWithAbility)
+            button.ThisButton.onClick.AddListener(() => { ChangeMode(button.TargetMode); }
+            );
+
+        Enabled = false;
     }
     private void ChangeMode(ControlMode targetMode)
     {
@@ -30,5 +32,5 @@ public partial class ChangeControlMode : SystemBase
         _textWithControlMode.WriteText(targetMode);
         SystemAPI.SetSingleton(controlMode);
     }
-    protected override void OnUpdate(){}
+
 }
