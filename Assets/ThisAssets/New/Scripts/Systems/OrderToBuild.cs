@@ -41,8 +41,10 @@ public partial struct OrderToBuild : ISystem
             ecb.Playback(state.EntityManager);
             return;
         }
+
         Entity targetEntity = orderInformation.TargetEntity;
         Foundation targetFoundation = SystemAPI.GetComponent<Foundation>(targetEntity);
+
         if (targetFoundation.Builder != Entity.Null)
             return;
 
@@ -56,9 +58,17 @@ public partial struct OrderToBuild : ISystem
         {
             if(duringNumber == targetNumber)
             {
+                Entity oldFoundationEntity = builder.ValueRO.TargetFoundation;
+                if(oldFoundationEntity != Entity.Null)
+                {
+                    RefRW<Foundation> oldFoundation = SystemAPI.GetComponentRW<Foundation>(oldFoundationEntity);
+                    oldFoundation.ValueRW.Builder = Entity.Null;
+                }
+
                 builder.ValueRW.TargetFoundation = targetEntity;
                 targetFoundation.Builder = entity;
                 SystemAPI.SetComponent(targetEntity, targetFoundation);
+
                 return;
             }
             else
