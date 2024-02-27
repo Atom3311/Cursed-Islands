@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 465966877263296774}
   - component: {fileID: 4348330972831050067}
   - component: {fileID: 303360014568534426}
+  - component: {fileID: 987167426658421151}
   m_Layer: 0
-  m_Name: Builder(entity)
+  m_Name: BerryPicker(entity)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c74eb881cb4618f4a8fbbcfd34dcf362, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetObject: {fileID: 5130165437610889292, guid: 8627c08f4cf5a1b48a3ae557daf50972,
+  TargetObject: {fileID: 6580273254076767126, guid: 54376d175a33bae48aced52b0cca8375,
     type: 3}
 --- !u!114 &303360014568534426
 MonoBehaviour:
@@ -110,3 +111,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bcfd62ba0a4984448dcff4f5fc2c428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &987167426658421151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3326921994933782065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d15ffa4d914fe14fa526f63888b80ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetResource: 2
+  NeededTime: 2
+  Range: 2

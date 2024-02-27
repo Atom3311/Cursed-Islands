@@ -49,7 +49,7 @@ public partial struct OrderToExtruct : ISystem
                 ecb.RemoveComponent<ExtructAction>(entity);
                 ecb.RemoveComponent<Extructing>(entity);
                 collector.ValueRW.DuringTime = 0;
-                //animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, false);
+                animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, false);
 
             }
             ecb.Playback(state.EntityManager);

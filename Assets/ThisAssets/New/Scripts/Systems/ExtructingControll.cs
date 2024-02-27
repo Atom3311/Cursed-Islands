@@ -22,7 +22,7 @@ public partial struct ExtructingControll : ISystem
             if (healthState.ValueRO.IsDead)
             {
                 ecb.RemoveComponent<Extructing>(entity);
-                //animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, false);
+                animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, false);
                 continue;
             }
 
@@ -32,7 +32,7 @@ public partial struct ExtructingControll : ISystem
                 ecb.RemoveComponent<ExtructAction>(entity);
                 ecb.RemoveComponent<Extructing>(entity);
                 collector.ValueRW.DuringTime = 0;
-                //animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, false);
+                animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, false);
                 continue;
             }
 
@@ -72,7 +72,7 @@ public partial struct ExtructingControll : ISystem
             {
                 collector.ValueRW.DuringTime += SystemAPI.Time.DeltaTime;
             }
-            //animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, true);
+            animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, true);
         }
         SystemAPI.SetSingleton(resources);
         ecb.Playback(state.EntityManager);

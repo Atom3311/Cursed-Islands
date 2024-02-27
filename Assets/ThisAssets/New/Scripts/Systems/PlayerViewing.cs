@@ -6,7 +6,7 @@ public partial class PlayerViewing : SystemBase
 {
     private InformationAboutControlMode _controlMode;
     private InformationAboutInputPlayer _input;
-    private float2 _previousPositionClik;
+    private float2? _previousPositionClik;
     protected override void OnUpdate()
     {
         _controlMode = SystemAPI.GetSingleton<InformationAboutControlMode>();
@@ -15,14 +15,21 @@ public partial class PlayerViewing : SystemBase
         if (_controlMode.ControlMode != ControlMode.Viewing)
             return;
 
-        if (_input.ClickDown)
+        if (_input.ClickUp)
+            _previousPositionClik = null;
+
+        float2 duringMousePosition = _input.MousePosition;
+
+        if (_input.ClickDown && !PointOnScreen.PointOnUIElement(duringMousePosition))
             _previousPositionClik = _input.MousePosition;
+
+        if (!_previousPositionClik.HasValue)
+            return;
 
         if (!_input.Hold)
             return;
 
-        float2 duringMousePosition = _input.MousePosition;
-        float2 translate = (_previousPositionClik - duringMousePosition) * Constants.SpeedOffsetCameraOnPixel;
+        float2 translate = (_previousPositionClik.Value - duringMousePosition) * Constants.SpeedOffsetCameraOnPixel;
         Transform cameraTransform = Camera.main.transform;
         cameraTransform.Translate(math.right() * translate.x);
         float3 forward = cameraTransform.forward;

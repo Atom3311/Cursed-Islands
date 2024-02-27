@@ -3,5 +3,6 @@
     None,
     Move,
     Extruct,
-    Attack
+    Attack,
+    Build
 }

@@ -3,6 +3,7 @@ using Unity.Physics;
 using Unity.Mathematics;
 using Unity.Collections;
 using System;
+[UpdateAfter(typeof(InputHandler))]
 public partial struct OrdersController : ISystem
 {
     private void OnCreate(ref SystemState state)
@@ -75,6 +76,12 @@ public partial struct OrdersController : ISystem
             {
                 newInformation.DuringOrder = Order.Move;
                 newInformation.TargetPoint = hit.Position;
+                break;
+            }
+            else if(SystemAPI.HasComponent<Foundation>(hitEntity))
+            {
+                newInformation.DuringOrder = Order.Build;
+                newInformation.TargetEntity = hitEntity;
                 break;
             }
         }
