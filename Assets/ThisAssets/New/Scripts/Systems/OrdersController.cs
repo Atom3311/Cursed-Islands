@@ -84,6 +84,12 @@ public partial struct OrdersController : ISystem
                 newInformation.TargetEntity = hitEntity;
                 break;
             }
+            else if (SystemAPI.HasComponent<PlayerBuilding>(hitEntity))
+            {
+                newInformation.DuringOrder = Order.Buy;
+                newInformation.TargetEntity = hitEntity;
+                break;
+            }
         }
 
         SystemAPI.SetSingleton(newInformation);

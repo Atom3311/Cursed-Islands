@@ -45,6 +45,7 @@ public partial struct BuildControll : ISystem
                 ecb.SetComponent(createdEntity, transformForCreatedEntity);
 
                 ecb.AddComponent<Building>(createdEntity);
+                ecb.AddComponent<PlayerBuilding>(createdEntity);
             }
             else
             {

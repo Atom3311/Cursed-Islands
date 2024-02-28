@@ -4,5 +4,6 @@
     Move,
     Extruct,
     Attack,
-    Build
+    Build,
+    Buy
 }
