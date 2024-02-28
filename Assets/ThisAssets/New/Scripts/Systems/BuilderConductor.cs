@@ -5,6 +5,11 @@ using Unity.Collections;
 [UpdateAfter(typeof(BuilderHealthStateControll))]
 public partial struct BuilderConductor : ISystem
 {
+    private void OnCreate(ref SystemState state)
+    {
+        state.RequireForUpdate<BuildingParametersComponent>();
+        state.RequireForUpdate<InformationAboutResources>();
+    }
     private void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);

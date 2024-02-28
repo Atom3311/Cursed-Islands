@@ -8,7 +8,11 @@ public partial struct OrderToBuild : ISystem
     private void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<OrderInformation>();
+        state.RequireForUpdate<InformationAboutResources>();
+        state.RequireForUpdate<BuildingParametersComponent>();
+
         entityQuery = state.GetEntityQuery(typeof(ChoosedUnit), typeof(Builder));
+
     }
     private void OnUpdate(ref SystemState state)
     {
@@ -48,6 +52,30 @@ public partial struct OrderToBuild : ISystem
         if (targetFoundation.Builder != Entity.Null)
             return;
 
+
+        var buildingParameters = SystemAPI.GetSingleton<BuildingParametersComponent>();
+        var resources = SystemAPI.GetSingleton<InformationAboutResources>();
+
+        int duringGold = resources.Gold;
+        int duringWood = resources.Wood;
+        int duringFood = resources.Food;
+
+        int neededGold = buildingParameters.Gold;
+        int neededWood = buildingParameters.Wood;
+        int neededFood = buildingParameters.Food;
+
+        if (duringGold < neededGold || duringWood < neededWood || duringFood < neededFood)
+        {
+            return;
+        }
+        else
+        {
+            resources.AddValue(Resource.Gold, -neededGold);
+            resources.AddValue(Resource.Wood, -neededWood);
+            resources.AddValue(Resource.Food, -neededFood);
+            SystemAPI.SetSingleton(resources);
+        }
+
         int targetNumber = Random.GetRandomNumber(0, entityQuery.CalculateEntityCount());
         int duringNumber = 0;
 
@@ -68,8 +96,7 @@ public partial struct OrderToBuild : ISystem
                 builder.ValueRW.TargetFoundation = targetEntity;
                 targetFoundation.Builder = entity;
                 SystemAPI.SetComponent(targetEntity, targetFoundation);
-
-                return;
+                break;
             }
             else
             {
