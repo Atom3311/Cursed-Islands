@@ -81,6 +81,7 @@ public partial class BuyPlayerUnit : SystemBase
                 Entity targetEntity = _entititesForBuy.Entities[typeIndex];
                 UnitCost cost = _entititesForBuy.UnitsCost[typeIndex];
                 float3 position = _targetTransform.Position + math.back() * 3;
+                position.y = 0.25f;
                 AddEvent(targetEntity, cost, position);
             });
         }

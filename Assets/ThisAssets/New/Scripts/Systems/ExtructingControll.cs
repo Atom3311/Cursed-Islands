@@ -2,6 +2,7 @@
 using Unity.Collections;
 using Unity.Transforms;
 using Unity.Mathematics;
+using Unity.Rendering;
 public partial struct ExtructingControll : ISystem
 {
     private void OnCreate(ref SystemState state)
@@ -56,8 +57,7 @@ public partial struct ExtructingControll : ISystem
                     foreach (Child child in childs)
                     {
                         Entity childEntity = child.Value;
-                        if (SystemAPI.HasComponent<GraphicOfResource>(childEntity))
-                            ecb.DestroyEntity(childEntity);
+                        ecb.DestroyEntity(childEntity);
                     }
                 }
 
