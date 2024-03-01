@@ -1,6 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Collections;
 using Unity.Transforms;
+using Unity.Mathematics;
 public partial struct ExtructingControll : ISystem
 {
     private void OnCreate(ref SystemState state)
@@ -12,11 +13,12 @@ public partial struct ExtructingControll : ISystem
         InformationAboutResources resources = SystemAPI.GetSingleton<InformationAboutResources>();
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
 
-        foreach (var (extructingTag, healthState, animator, collector, entity) in SystemAPI.Query<
+        foreach (var (extructingTag, healthState, animator, collector, transform, entity) in SystemAPI.Query<
             RefRO<Extructing>,
             RefRO<HealthState>,
             AnimatorComponent,
-            RefRW<Collector>>()
+            RefRW<Collector>,
+            RefRO<LocalTransform>>()
             .WithEntityAccess())
         {
             if (healthState.ValueRO.IsDead)
@@ -72,7 +74,11 @@ public partial struct ExtructingControll : ISystem
             {
                 collector.ValueRW.DuringTime += SystemAPI.Time.DeltaTime;
             }
-            animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, true);
+
+            LocalTransform targetTransform = SystemAPI.GetComponent<LocalTransform>(targetEntity);
+
+            bool isNormalDistance = math.distance(targetTransform.Position, transform.ValueRO.Position) <= collector.ValueRO.Range;
+            animator.ThisAnimator.SetBool(Constants.NameOfFieldForAnimationExtruct, isNormalDistance);
         }
         SystemAPI.SetSingleton(resources);
         ecb.Playback(state.EntityManager);

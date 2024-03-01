@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using Unity.Mathematics;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 public static class PointOnScreen
 {
-    static public bool PointOnUIElement(Vector2 point)
+    static public bool PointOnUIElement(float2 point)
     {
         PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
         pointerEventData.position = point;

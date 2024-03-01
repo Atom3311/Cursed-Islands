@@ -56,7 +56,7 @@ public partial struct BattleController : ISystem
                 targetHealthState.Health -= battleComponent.ValueRO.Power;
                 SystemAPI.SetComponent(targetEntity, targetHealthState);
 
-                if (!DistanceIsNormal() && targetHealthState.IsDead)
+                if (!DistanceIsNormal() || targetHealthState.IsDead)
                 {
                     ecb.RemoveComponent<AttackingUnit>(entity);
                 }
