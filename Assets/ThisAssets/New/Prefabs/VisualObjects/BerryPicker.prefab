@@ -58,16 +58,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1063094714816996356, guid: 2b526c5338cbbd840ae1dbb44e05e1c1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.7660508
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2b526c5338cbbd840ae1dbb44e05e1c1,
         type: 3}
       propertyPath: m_Name
       value: BerryPicker
+      objectReference: {fileID: 0}
+    - target: {fileID: 3611028121608000686, guid: 2b526c5338cbbd840ae1dbb44e05e1c1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5037904
+      objectReference: {fileID: 0}
+    - target: {fileID: 4167280743394806330, guid: 2b526c5338cbbd840ae1dbb44e05e1c1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.95
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 2b526c5338cbbd840ae1dbb44e05e1c1,
         type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 13d52f8070a6c944aa5329fd8feacac2, type: 2}
+    - target: {fileID: 7570456002536969217, guid: 2b526c5338cbbd840ae1dbb44e05e1c1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.1821129
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

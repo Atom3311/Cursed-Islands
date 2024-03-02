@@ -66,11 +66,6 @@ public partial struct OrderToBuild : ISystem
         {
             if(duringNumber == targetNumber)
             {
-
-                builder.ValueRW.TargetFoundation = targetEntity;
-                targetFoundation.Builder = entity;
-                SystemAPI.SetComponent(targetEntity, targetFoundation);
-
                 int duringGold = resources.Gold;
                 int duringWood = resources.Wood;
                 int duringFood = resources.Food;
@@ -97,6 +92,11 @@ public partial struct OrderToBuild : ISystem
                     RefRW<Foundation> oldFoundation = SystemAPI.GetComponentRW<Foundation>(oldFoundationEntity);
                     oldFoundation.ValueRW.Builder = Entity.Null;
                 }
+
+                builder.ValueRW.TargetFoundation = targetEntity;
+                targetFoundation.Builder = entity;
+                SystemAPI.SetComponent(targetEntity, targetFoundation);
+
 
                 break;
             }
