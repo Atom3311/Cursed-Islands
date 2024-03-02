@@ -7,14 +7,16 @@ public partial class ConnectMainAnimatorWithEntity : SystemBase
     private bool _isInit;
     protected override void OnCreate()
     {
-        SceneManager.sceneLoaded += (s, m) =>
+        Scene duringScene = SceneManager.GetSceneAt(0);
+        _isInit = duringScene.isLoaded;
+        if (!_isInit)
         {
-            if (s.isSubScene)
-                return;
+            SceneManager.sceneLoaded += (s, m) =>
+            {
+                _isInit = duringScene.isLoaded;
 
-            _isInit = true;
-
-        };
+            };
+        }
     }
     protected override void OnUpdate()
     {

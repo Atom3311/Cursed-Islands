@@ -6,13 +6,18 @@ using UnityEngine.SceneManagement;
 public partial class ObjectVisualization : SystemBase
 {
     private bool _isInit;
-    private Scene _duringScene = SceneManager.GetSceneAt(0);
     protected override void OnCreate()
     {
-        SceneManager.sceneLoaded += delegate (Scene scene, LoadSceneMode mode)
+        Scene duringScene = SceneManager.GetSceneAt(0);
+        _isInit = duringScene.isLoaded;
+        if (!_isInit)
         {
-            _isInit = _duringScene.isLoaded;
-        };
+            SceneManager.sceneLoaded += delegate (Scene scene, LoadSceneMode mode)
+            {
+                if(!_isInit)
+                    _isInit = duringScene.isLoaded;
+            };
+        }
     }
     protected override void OnUpdate()
     {
