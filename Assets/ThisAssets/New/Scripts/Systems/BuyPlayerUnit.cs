@@ -23,22 +23,27 @@ public partial class BuyPlayerUnit : SystemBase
         RequireForUpdate<OrderInformation>();
         RequireForUpdate<InformationAboutInputPlayer>();
         RequireForUpdate<EntitiesForBuy>();
+        //if (!EditorSettings.enterPlayModeOptionsEnabled)
+        //{
+        //    SceneManager.sceneLoaded += (scene, mode) =>
+        //    {
+        //        if (scene.isSubScene)
+        //            return;
 
-        if (!EditorSettings.enterPlayModeOptionsEnabled)
+        //        Start();
+        //    };
+        //}
+        //else
+        //{
+        //    Start();
+        //}
+        SceneManager.sceneLoaded += (scene, mode) =>
         {
-            SceneManager.sceneLoaded += (scene, mode) =>
-            {
-                if (scene.isSubScene)
-                    return;
+            if (scene.isSubScene)
+                return;
 
-                Start();
-            };
-        }
-        else
-        {
             Start();
-        }
-
+        };
         void Start()
         {
             _buyUIParameters = Object.FindObjectOfType<BuyUnitsParametersForUI>(true);

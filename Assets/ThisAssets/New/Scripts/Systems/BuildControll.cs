@@ -40,11 +40,12 @@ public partial struct BuildControll : ISystem
                 Entity createdEntity = ecb.Instantiate(buildingParametersComopnent.Building);
 
                 float3 position = transform.ValueRO.Position;
-                position.y = 1;
+                position.y = 0.75f;
                 LocalTransform transformForCreatedEntity = LocalTransform.Identity.WithPosition(position);
                 transformForCreatedEntity = transformForCreatedEntity.Rotate(quaternion.EulerXYZ(-math.PI / 2, math.PI,0));
                 ecb.SetComponent(createdEntity, transformForCreatedEntity);
 
+                ecb.AddComponent<Unit>(createdEntity);
                 ecb.AddComponent<Building>(createdEntity);
                 ecb.AddComponent<PlayerBuilding>(createdEntity);
             }

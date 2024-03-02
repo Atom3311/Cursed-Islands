@@ -7,6 +7,7 @@ public class HullOfPlayerBuilding : MonoBehaviour
         public override void Bake(HullOfPlayerBuilding authoring)
         {
             Entity targetEntity = GetEntity(TransformUsageFlags.Dynamic);
+            AddComponent<Unit>(targetEntity);
             AddComponent<Building>(targetEntity);
             AddComponent<PlayerBuilding>(targetEntity);
         }

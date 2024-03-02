@@ -56,26 +56,6 @@ public partial struct OrderToBuild : ISystem
         var buildingParameters = SystemAPI.GetSingleton<BuildingParametersComponent>();
         var resources = SystemAPI.GetSingleton<InformationAboutResources>();
 
-        int duringGold = resources.Gold;
-        int duringWood = resources.Wood;
-        int duringFood = resources.Food;
-
-        int neededGold = buildingParameters.Gold;
-        int neededWood = buildingParameters.Wood;
-        int neededFood = buildingParameters.Food;
-
-        if (duringGold < neededGold || duringWood < neededWood || duringFood < neededFood)
-        {
-            return;
-        }
-        else
-        {
-            resources.AddValue(Resource.Gold, -neededGold);
-            resources.AddValue(Resource.Wood, -neededWood);
-            resources.AddValue(Resource.Food, -neededFood);
-            SystemAPI.SetSingleton(resources);
-        }
-
         int targetNumber = Random.GetRandomNumber(0, entityQuery.CalculateEntityCount());
         int duringNumber = 0;
 
@@ -86,16 +66,38 @@ public partial struct OrderToBuild : ISystem
         {
             if(duringNumber == targetNumber)
             {
+
+                builder.ValueRW.TargetFoundation = targetEntity;
+                targetFoundation.Builder = entity;
+                SystemAPI.SetComponent(targetEntity, targetFoundation);
+
+                int duringGold = resources.Gold;
+                int duringWood = resources.Wood;
+                int duringFood = resources.Food;
+
+                int neededGold = buildingParameters.Gold;
+                int neededWood = buildingParameters.Wood;
+                int neededFood = buildingParameters.Food;
+
+                if (duringGold < neededGold || duringWood < neededWood || duringFood < neededFood)
+                {
+                    return;
+                }
+                else
+                {
+                    resources.AddValue(Resource.Gold, -neededGold);
+                    resources.AddValue(Resource.Wood, -neededWood);
+                    resources.AddValue(Resource.Food, -neededFood);
+                    SystemAPI.SetSingleton(resources);
+                }
+
                 Entity oldFoundationEntity = builder.ValueRO.TargetFoundation;
-                if(oldFoundationEntity != Entity.Null)
+                if (oldFoundationEntity != Entity.Null)
                 {
                     RefRW<Foundation> oldFoundation = SystemAPI.GetComponentRW<Foundation>(oldFoundationEntity);
                     oldFoundation.ValueRW.Builder = Entity.Null;
                 }
 
-                builder.ValueRW.TargetFoundation = targetEntity;
-                targetFoundation.Builder = entity;
-                SystemAPI.SetComponent(targetEntity, targetFoundation);
                 break;
             }
             else

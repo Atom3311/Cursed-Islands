@@ -2,11 +2,24 @@
 using Unity.Transforms;
 using UnityEngine;
 using Unity.Mathematics;
-public partial struct ObjectVisualization : ISystem
+using UnityEngine.SceneManagement;
+public partial class ObjectVisualization : SystemBase
 {
-    public void OnUpdate(ref SystemState state)
+    private bool _isInit;
+    private Scene _duringScene = SceneManager.GetSceneAt(0);
+    protected override void OnCreate()
     {
-        foreach( var (
+        SceneManager.sceneLoaded += delegate (Scene scene, LoadSceneMode mode)
+        {
+            _isInit = _duringScene.isLoaded;
+        };
+    }
+    protected override void OnUpdate()
+    {
+        if (!_isInit)
+            return;
+        
+        foreach ( var (
             transform,
             visualObject) in SystemAPI.Query<
                 RefRO<LocalTransform>,
